@@ -1,4 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+
+const portfolioEmail = "313721325sjw@gmail.com";
 
 // Check if running in server environment
 const isServerEnvironment = typeof window === 'undefined' && process.env.NODE_ENV === 'production';
@@ -57,7 +59,7 @@ const createSystemData = (overrides: {
     ...overrides.system
   },
   contact: {
-    email: "gustavjames382@gmail.com",
+    email: portfolioEmail,
     ...overrides.contact
   },
   timestamp: new Date().toISOString()
@@ -120,7 +122,7 @@ export async function GET() {
         hostname: system.hostname || 'localhost'
       },
       contact: {
-        email: "gustavjames382@gmail.com"
+        email: portfolioEmail
       },
       timestamp: new Date().toISOString()
     };

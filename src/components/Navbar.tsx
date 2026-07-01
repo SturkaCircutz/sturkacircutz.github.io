@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import ThemeSwitcher from './ThemeSwitcher';
 
 // No props needed for simple navigation
 
@@ -25,38 +26,42 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 glass">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="flex justify-between items-center h-20">
+    <nav className="glass fixed top-0 z-50 w-full">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-20 items-center justify-between gap-4">
           <div className="flex-shrink-0">
             <a 
               href="#home" 
               onClick={(e) => { e.preventDefault(); scrollToSection('#home'); }}
-              className="text-2xl font-bold text-white hover:text-gray-200 transition-colors terminal-text"
+              className="terminal-text text-lg font-bold text-[rgb(var(--text))] transition-colors hover:text-[rgb(var(--accent))] sm:text-2xl"
             >
-              $ gustav@james:~$
+              $ jiawen@sun:~$
             </a>
           </div>
 
           <div className="hidden md:block">
-            <div className="flex items-center space-x-8">
+            <div className="flex items-center gap-5">
               {navItems.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
                   onClick={(e) => { e.preventDefault(); scrollToSection(item.href); }}
-                  className="text-green-400 hover:text-green-300 px-4 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-green-400/10 terminal-text"
+                  className="terminal-text rounded-md px-3 py-2 text-sm font-medium text-[rgb(var(--muted))] transition-colors hover:bg-[rgb(var(--accent))]/10 hover:text-[rgb(var(--accent))]"
                 >
                   ./{item.label}
                 </a>
               ))}
+              <ThemeSwitcher />
             </div>
           </div>
 
-          <div className="md:hidden">
+          <div className="flex items-center gap-3 md:hidden">
+            <ThemeSwitcher />
             <button
+              type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-white hover:text-gray-200 p-2"
+              aria-label="Toggle navigation menu"
+              className="rounded-md p-2 text-[rgb(var(--text))] transition-colors hover:bg-[rgb(var(--accent))]/10 hover:text-[rgb(var(--accent))]"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -65,13 +70,13 @@ const Navbar = () => {
 
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 glass rounded-lg mt-2">
+            <div className="glass mt-2 space-y-1 rounded-lg px-2 pb-3 pt-2 sm:px-3">
               {navItems.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
                   onClick={(e) => { e.preventDefault(); scrollToSection(item.href); }}
-                  className="text-green-400 hover:text-green-300 block px-3 py-2 text-base font-medium transition-colors rounded-lg hover:bg-green-400/10 terminal-text"
+                  className="terminal-text block rounded-md px-3 py-2 text-base font-medium text-[rgb(var(--muted))] transition-colors hover:bg-[rgb(var(--accent))]/10 hover:text-[rgb(var(--accent))]"
                 >
                   ./{item.label}
                 </a>

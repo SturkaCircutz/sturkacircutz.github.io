@@ -1,8 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { AlertCircle, CheckCircle, Github, Linkedin, Mail, MapPin, Phone, Send } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { contactInfo } from '@/data/personalData';
-import { Send, CheckCircle, AlertCircle } from 'lucide-react';
+
+type ContactRow = [LucideIcon, string, string, string];
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -14,36 +17,26 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
     try {
       const response = await fetch('/api/messages', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
         setSubmitStatus('success');
-        setFormData({
-          name: '',
-          email: '',
-          subject: '',
-          message: ''
-        });
+        setFormData({ name: '', email: '', subject: '', message: '' });
       } else {
         setSubmitStatus('error');
       }
@@ -54,153 +47,140 @@ const Contact = () => {
       setIsSubmitting(false);
     }
   };
-  return (
-    <section id="contact" className="py-20 bg-black relative overflow-hidden">
-      {/* Matrix background effects */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 left-10 w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
-        <div className="absolute top-20 right-20 w-2 h-2 bg-cyan-400 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-10 left-1/4 w-1 h-1 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/3 right-10 w-1 h-1 bg-green-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
-          <div className="terminal-text text-sm mb-4">
-            &gt; INITIALIZING CONTACT_PROTOCOL...
-          </div>
-          <h2 className="text-4xl font-bold text-white mb-4 terminal-text">CONTACT_ME</h2>
-          <div className="w-16 h-1 bg-green-400 mx-auto rounded-full"></div>
+  const inputClass =
+    'w-full rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--surface-soft))]/70 px-4 py-3 text-[rgb(var(--text))] outline-none transition placeholder:text-[rgb(var(--muted))]/70 focus:border-[rgb(var(--accent))] focus:ring-2 focus:ring-[rgb(var(--accent))]/30';
+
+  return (
+    <section id="contact" className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12 text-center">
+          <p className="terminal-text mb-3 text-sm font-semibold text-[rgb(var(--accent))]">&gt; CONTACT</p>
+          <h2 className="text-4xl font-bold text-[rgb(var(--text))]">Contact Me</h2>
+          <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-[rgb(var(--accent))]"></div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          <div>
-            <h3 className="text-2xl font-bold text-white mb-6 terminal-text">
-              &gt; LET&apos;S_START_COLLABORATING
-            </h3>
-            <p className="text-gray-300 mb-8 leading-relaxed">
-              I firmly believe that the best projects come from good communication and collaboration.
-              Whatever ideas or needs you have, I&apos;m willing to listen and provide professional technical support.
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+          <div className="space-y-5">
+            <h3 className="text-2xl font-bold text-[rgb(var(--text))]">Open to project and research conversations.</h3>
+            <p className="leading-7 text-[rgb(var(--muted))]">
+              Reach out about machine learning, ASR, systems, GPU programming, or full-stack software work.
             </p>
 
-            <div className="space-y-6 mb-8">
-              <div className="p-4 glass rounded-xl hover:bg-green-900/20 transition-colors duration-300 hacker-glow">
-                <h4 className="font-semibold text-green-400 terminal-text mb-2">&gt; EMAIL</h4>
-                <p className="text-green-300 terminal-text">{contactInfo.email}</p>
-              </div>
-              
-              <div className="p-4 glass rounded-xl hover:bg-green-900/20 transition-colors duration-300 hacker-glow">
-                <h4 className="font-semibold text-green-400 terminal-text mb-2">&gt; PHONE</h4>
-                <p className="text-green-300 terminal-text">{contactInfo.phone}</p>
-              </div>
-              
-              <div className="p-4 glass rounded-xl hover:bg-green-900/20 transition-colors duration-300 hacker-glow">
-                <h4 className="font-semibold text-green-400 terminal-text mb-2">&gt; LOCATION</h4>
-                <p className="text-green-300 terminal-text">{contactInfo.location}</p>
-              </div>
-            </div>
+            {([
+              [Mail, 'Email', contactInfo.email, `mailto:${contactInfo.email}`],
+              [Phone, 'Phone', contactInfo.phone, `tel:${contactInfo.phone.replace(/\D/g, '')}`],
+              [MapPin, 'Location', contactInfo.location, ''],
+              [Github, 'GitHub', 'github.com/SturkaCircutz', contactInfo.social.github ?? ''],
+              [Linkedin, 'LinkedIn', 'jiawen-sun-952a02408', contactInfo.social.linkedin ?? '']
+            ] satisfies ContactRow[]).map(([Icon, label, value, href]) => {
+              const content = (
+                <div className="glass flex items-center gap-4 rounded-lg p-4 transition hover:border-[rgb(var(--accent))]">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[rgb(var(--accent))]/15 text-[rgb(var(--accent))]">
+                    <Icon size={20} aria-hidden="true" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-sm font-semibold text-[rgb(var(--accent))]">{label}</div>
+                    <div className="truncate text-[rgb(var(--text))]">{value}</div>
+                  </div>
+                </div>
+              );
+
+              return href ? (
+                <a key={String(label)} href={String(href)} target={String(href).startsWith('http') ? '_blank' : undefined} rel="noreferrer">
+                  {content}
+                </a>
+              ) : (
+                <div key={String(label)}>{content}</div>
+              );
+            })}
           </div>
 
-          <div className="glass rounded-2xl p-8 hacker-glow">
-            <h3 className="text-xl font-bold text-white mb-6 terminal-text">
-              &gt; SEND_MESSAGE
-            </h3>
-            
-            {/* Status Messages */}
+          <div className="glass accent-glow rounded-lg p-6 sm:p-8">
+            <h3 className="terminal-text mb-6 text-xl font-bold text-[rgb(var(--text))]">&gt; SEND_MESSAGE</h3>
+
             {submitStatus === 'success' && (
-              <div className="mb-6 p-4 bg-green-900/20 border border-green-400 rounded-lg flex items-center space-x-2">
-                <CheckCircle className="text-green-400" size={20} />
-                <span className="text-green-400 terminal-text">MESSAGE_SENT_SUCCESSFULLY</span>
+              <div className="mb-6 flex items-center gap-2 rounded-md border border-[rgb(var(--accent-strong))] bg-[rgb(var(--accent-strong))]/10 p-4 text-[rgb(var(--accent-strong))]">
+                <CheckCircle size={20} aria-hidden="true" />
+                <span>Message sent successfully.</span>
               </div>
             )}
-            
+
             {submitStatus === 'error' && (
-              <div className="mb-6 p-4 bg-red-900/20 border border-red-400 rounded-lg flex items-center space-x-2">
-                <AlertCircle className="text-red-400" size={20} />
-                <span className="text-red-400 terminal-text">ERROR_SENDING_MESSAGE</span>
+              <div className="mb-6 flex items-center gap-2 rounded-md border border-red-400 bg-red-500/10 p-4 text-red-400">
+                <AlertCircle size={20} aria-hidden="true" />
+                <span>Message could not be sent.</span>
               </div>
             )}
-            
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-green-400 mb-2 terminal-text">
-                    NAME
-                  </label>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <label className="block">
+                  <span className="mb-2 block text-sm font-semibold text-[rgb(var(--accent))]">Name</span>
                   <input
                     type="text"
-                    id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-black border border-green-400 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300 text-white terminal-text"
+                    className={inputClass}
                     placeholder="Your name"
                     required
                   />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-green-400 mb-2 terminal-text">
-                    EMAIL
-                  </label>
+                </label>
+                <label className="block">
+                  <span className="mb-2 block text-sm font-semibold text-[rgb(var(--accent))]">Email</span>
                   <input
                     type="email"
-                    id="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-black border border-green-400 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300 text-white terminal-text"
+                    className={inputClass}
                     placeholder="your.email@example.com"
                     required
                   />
-                </div>
-              </div>
-              
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-green-400 mb-2 terminal-text">
-                  SUBJECT
                 </label>
+              </div>
+
+              <label className="block">
+                <span className="mb-2 block text-sm font-semibold text-[rgb(var(--accent))]">Subject</span>
                 <input
                   type="text"
-                  id="subject"
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-black border border-green-400 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300 text-white terminal-text"
-                  placeholder="Project collaboration / Technical consultation / Other"
+                  className={inputClass}
+                  placeholder="Project collaboration / research / question"
                   required
                 />
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-green-400 mb-2 terminal-text">
-                  MESSAGE
-                </label>
+              </label>
+
+              <label className="block">
+                <span className="mb-2 block text-sm font-semibold text-[rgb(var(--accent))]">Message</span>
                 <textarea
-                  id="message"
                   name="message"
                   rows={5}
                   value={formData.message}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-black border border-green-400 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300 resize-none text-white terminal-text"
-                  placeholder="Please describe your requirements or ideas in detail..."
+                  className={`${inputClass} resize-none`}
+                  placeholder="Tell me what you want to build or discuss."
                   required
                 />
-              </div>
-              
+              </label>
+
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-green-600 text-black font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition-all duration-300 terminal-text disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-[rgb(var(--accent))] px-6 py-3 font-semibold text-slate-950 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSubmitting ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
-                    <span>SENDING...</span>
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />
+                    Sending
                   </>
                 ) : (
                   <>
-                    <Send size={16} />
-                    <span>&gt; SEND_MESSAGE</span>
+                    <Send size={16} aria-hidden="true" />
+                    Send Message
                   </>
                 )}
               </button>

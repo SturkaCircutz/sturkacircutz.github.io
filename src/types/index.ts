@@ -6,12 +6,13 @@ export interface Project {
   liveUrl?: string;
   githubUrl?: string;
   image?: string;
+  status?: string;
 }
 
 export interface Skill {
   name: string;
   level: number;
-  category: 'java' | 'cybersecurity' | 'cryptography';
+  category: 'machine-learning' | 'languages' | 'web-backend' | 'systems';
 }
 
 export interface ContactInfo {

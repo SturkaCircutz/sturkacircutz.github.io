@@ -1,52 +1,55 @@
 @import "tailwindcss";
 
 @layer base {
+  :root {
+    --background: 8 12 20;
+    --surface: 17 24 39;
+    --surface-soft: 31 41 55;
+    --text: 248 250 252;
+    --muted: 203 213 225;
+    --accent: 45 212 191;
+    --accent-strong: 34 197 94;
+    --border: 71 85 105;
+  }
+
+  body[data-theme="minimal"] {
+    --background: 248 250 252;
+    --surface: 255 255 255;
+    --surface-soft: 241 245 249;
+    --text: 15 23 42;
+    --muted: 71 85 105;
+    --accent: 79 70 229;
+    --accent-strong: 20 184 166;
+    --border: 203 213 225;
+  }
+
+  body[data-theme="high-contrast"] {
+    --background: 0 0 0;
+    --surface: 0 0 0;
+    --surface-soft: 18 18 18;
+    --text: 255 255 255;
+    --muted: 229 231 235;
+    --accent: 250 204 21;
+    --accent-strong: 255 255 255;
+    --border: 255 255 255;
+  }
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
-    font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
-    line-height: 1.6;
-    color: #00ff00;
-    background: #000000;
     min-height: 100vh;
-    position: relative;
     overflow-x: hidden;
+    background:
+      radial-gradient(circle at 15% 20%, rgb(var(--accent) / 0.18), transparent 32rem),
+      radial-gradient(circle at 85% 10%, rgb(var(--accent-strong) / 0.14), transparent 26rem),
+      rgb(var(--background));
+    color: rgb(var(--text));
   }
 
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-      radial-gradient(circle at 20% 80%, rgba(0, 255, 0, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(0, 255, 0, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba(0, 255, 0, 0.03) 0%, transparent 50%);
-    z-index: -1;
-  }
-
-  body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-      linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
-    z-index: -1;
-    animation: gridMove 20s linear infinite;
-  }
-
-  @keyframes gridMove {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(50px, 50px); }
+  ::selection {
+    background: rgb(var(--accent) / 0.3);
   }
 }
 
@@ -54,67 +57,40 @@
   .text-balance {
     text-wrap: balance;
   }
-  
-  .glass {
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 255, 0, 0.3);
-    box-shadow: 
-      0 0 20px rgba(0, 255, 0, 0.2),
-      inset 0 1px 0 rgba(0, 255, 0, 0.1);
-  }
-  
-  .gradient-text {
-    background: linear-gradient(135deg, #00ff00 0%, #00cc00 50%, #009900 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
-  }
-
-  .hacker-glow {
-    box-shadow: 
-      0 0 10px rgba(0, 255, 0, 0.5),
-      0 0 20px rgba(0, 255, 0, 0.3),
-      0 0 30px rgba(0, 255, 0, 0.1);
-  }
 
   .terminal-text {
-    font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
-    color: #00ff00;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-family: var(--font-geist-mono), "Courier New", monospace;
+    letter-spacing: 0;
   }
 
-  .matrix-bg {
-    background: linear-gradient(45deg, #000 25%, transparent 25%), 
-                linear-gradient(-45deg, #000 25%, transparent 25%), 
-                linear-gradient(45deg, transparent 75%, #000 75%), 
-                linear-gradient(-45deg, transparent 75%, #000 75%);
-    background-size: 20px 20px;
-    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  .glass {
+    background: rgb(var(--surface) / 0.84);
+    border: 1px solid rgb(var(--border) / 0.7);
+    box-shadow: 0 18px 50px rgb(0 0 0 / 0.18);
+    backdrop-filter: blur(16px);
   }
 
-  /* 3D Card Effects */
+  .accent-glow {
+    box-shadow:
+      0 0 0 1px rgb(var(--accent) / 0.18),
+      0 18px 50px rgb(var(--accent) / 0.18);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, rgb(var(--accent)), rgb(var(--accent-strong)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
   .perspective-1000 {
     perspective: 1000px;
-  }
-
-  .preserve-3d {
-    transform-style: preserve-3d;
   }
 
   .backface-hidden {
     backface-visibility: hidden;
   }
 
-  .writing-mode-vertical-rl {
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-  }
-
-  /* Flip Card Effects */
   .transform-style-preserve-3d {
     transform-style: preserve-3d;
   }
@@ -128,34 +104,27 @@
   }
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(var(--background));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
+  background: rgb(var(--border));
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgb(var(--accent));
 }
 
-/* Smooth animations */
-* {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Custom animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -165,10 +134,10 @@
 
 @keyframes float {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
 }
 

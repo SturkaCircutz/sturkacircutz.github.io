@@ -1,28 +1,28 @@
 'use client';
 
-import Interactive3DCardGrid from './Interactive3DCard';
+import { projects } from '@/data/personalData';
+import Interactive3DCard from './Interactive3DCard';
 
 const Projects = () => {
   return (
-    <section id="projects" className="py-20 bg-black relative overflow-hidden">
-      {/* Matrix background effects */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 left-10 w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
-        <div className="absolute top-20 right-20 w-2 h-2 bg-cyan-400 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-10 left-1/4 w-1 h-1 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/3 right-10 w-1 h-1 bg-green-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
-          <div className="terminal-text text-sm mb-4">
-            &gt; LOADING PROJECT_DATABASE...
-          </div>
-          <h2 className="text-4xl font-bold text-white mb-4 terminal-text">FEATURED_PROJECTS</h2>
-          <div className="w-16 h-1 bg-green-400 mx-auto rounded-full"></div>
+    <section id="projects" className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12 text-center">
+          <p className="terminal-text mb-3 text-sm font-semibold text-[rgb(var(--accent))]">
+            &gt; TOP_GITHUB_REPOS
+          </p>
+          <h2 className="text-4xl font-bold text-[rgb(var(--text))]">Projects</h2>
+          <p className="mx-auto mt-4 max-w-3xl text-[rgb(var(--muted))]">
+            Top repositories from public project work, excluding coursework and school-file folders.
+          </p>
+          <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-[rgb(var(--accent))]"></div>
         </div>
 
-        <Interactive3DCardGrid />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {projects.map((project, index) => (
+            <Interactive3DCard key={project.id} project={project} index={index} />
+          ))}
+        </div>
       </div>
     </section>
   );

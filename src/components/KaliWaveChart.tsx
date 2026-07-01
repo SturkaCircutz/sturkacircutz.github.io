@@ -21,13 +21,13 @@ const KaliWaveChart: React.FC<KaliWaveChartProps> = ({
 
   const getColorClass = (color: string) => {
     switch (color) {
-      case 'green': return '#00ff00';
+      case 'green': return 'rgb(var(--accent))';
       case 'yellow': return '#ffff00';
       case 'orange': return '#ff8800';
       case 'red': return '#ff0000';
       case 'cyan': return '#00ffff';
       case 'purple': return '#8800ff';
-      default: return '#00ff00';
+      default: return 'rgb(var(--accent))';
     }
   };
 
@@ -145,7 +145,7 @@ const KaliWaveChart: React.FC<KaliWaveChartProps> = ({
     ctx.strokeRect(0, 0, width, height);
 
     // Draw grid lines
-    ctx.strokeStyle = 'rgba(0, 255, 0, 0.1)';
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
     ctx.lineWidth = 0.5;
     ctx.globalAlpha = 0.3;
     
@@ -204,7 +204,7 @@ const KaliWaveChart: React.FC<KaliWaveChartProps> = ({
       {/* Add scan line effect */}
       <div className="absolute inset-0 pointer-events-none">
         <div 
-          className="w-full h-0.5 bg-gradient-to-r from-transparent via-green-400 to-transparent opacity-60 animate-pulse"
+          className="h-0.5 w-full animate-pulse bg-gradient-to-r from-transparent via-[rgb(var(--accent))] to-transparent opacity-60"
           style={{
             animation: 'scan 2s linear infinite',
             animationDelay: `${Math.random() * 2}s`

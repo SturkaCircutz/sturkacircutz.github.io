@@ -32,7 +32,7 @@ const SpamBlocked = ({ onReset }: SpamBlockedProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[rgb(var(--background))]">
       {/* Background animation effect */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-20 left-20 w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
@@ -43,24 +43,24 @@ const SpamBlocked = ({ onReset }: SpamBlockedProps) => {
         <div className="absolute bottom-1/3 right-1/3 w-2 h-2 bg-orange-400 rounded-full animate-pulse" style={{ animationDelay: '3s' }}></div>
       </div>
 
-      <div className="text-center glass rounded-3xl p-12 hacker-glow relative z-10 max-w-md mx-4">
+      <div className="glass accent-glow relative z-10 mx-4 max-w-md rounded-lg p-12 text-center">
         {/* Warning icon */}
         <div className="text-6xl mb-6 animate-bounce">
           ⚠️
         </div>
         
         {/* Main title */}
-        <div className="terminal-text text-red-400 text-2xl mb-4 font-bold">
+        <div className="terminal-text mb-4 text-2xl font-bold text-red-400">
           &gt; Abnormal behavior detected
         </div>
         
         {/* Subtitle */}
-        <div className="text-orange-300 text-lg mb-6">
+        <div className="mb-6 text-lg text-orange-300">
           You&apos;re refreshing too frequently!
         </div>
         
         {/* Details */}
-        <div className="text-gray-300 mb-8 space-y-2">
+        <div className="mb-8 space-y-2 text-[rgb(var(--muted))]">
           <p className="text-sm">
             Detected 5 or more refresh operations within 10 seconds
           </p>
@@ -74,13 +74,13 @@ const SpamBlocked = ({ onReset }: SpamBlockedProps) => {
           <div className="text-4xl font-bold text-red-400 mb-2">
             {countdown}s
           </div>
-          <div className="text-sm text-gray-400">
+          <div className="text-sm text-[rgb(var(--muted))]">
             Please wait for cooldown to end
           </div>
         </div>
         
         {/* Progress bar */}
-        <div className="w-full bg-gray-700 rounded-full h-2 mb-6">
+        <div className="mb-6 h-2 w-full rounded-full bg-[rgb(var(--surface-soft))]">
           <div 
             className="bg-gradient-to-r from-red-500 to-orange-500 h-2 rounded-full transition-all duration-1000"
             style={{ width: `${((60 - countdown) / 60) * 100}%` }}
@@ -88,14 +88,14 @@ const SpamBlocked = ({ onReset }: SpamBlockedProps) => {
         </div>
         
         {/* Tips */}
-        <div className="text-xs text-gray-500 space-y-1">
+        <div className="space-y-1 text-xs text-[rgb(var(--muted))]">
           <p>• Please avoid frequent page refreshes</p>
           <p>• Contact administrator if you have issues</p>
           <p>• Access will be automatically restored after cooldown ends</p>
         </div>
         
         {/* Decorative border */}
-        <div className="absolute inset-0 rounded-3xl border-2 border-red-400/30 animate-pulse"></div>
+        <div className="absolute inset-0 animate-pulse rounded-lg border-2 border-red-400/30"></div>
       </div>
     </div>
   );

@@ -4,67 +4,53 @@ import { personalInfo } from '@/data/personalData';
 
 const About = () => {
   return (
-    <section id="about" className="py-20 bg-black relative overflow-hidden">
-      {/* Matrix background effects */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 left-10 w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
-        <div className="absolute top-20 right-20 w-2 h-2 bg-cyan-400 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-10 left-1/4 w-1 h-1 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/3 right-10 w-1 h-1 bg-green-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">About Me</h2>
-          <div className="w-16 h-1 bg-green-400 mx-auto rounded-full"></div>
+    <section id="about" className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12 text-center">
+          <p className="terminal-text mb-3 text-sm font-semibold text-[rgb(var(--accent))]">&gt; ABOUT</p>
+          <h2 className="text-4xl font-bold text-[rgb(var(--text))]">About Me</h2>
+          <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-[rgb(var(--accent))]"></div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <h3 className="text-2xl font-bold text-white mb-6">
-              Securing digital systems through cryptography and AI
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_0.85fr]">
+          <div className="space-y-6">
+            <h3 className="text-balance text-3xl font-bold text-[rgb(var(--text))]">
+              Building practical ML, ASR, systems, and web projects from first principles.
             </h3>
-            <div className="space-y-4 text-green-300 leading-relaxed">
-              <p>{personalInfo.about}</p>
-              <p className="text-green-400">
-                I focus on developing robust security solutions, implementing cryptographic protocols, and training AI models for threat detection.
-              </p>
+            <p className="text-lg leading-8 text-[rgb(var(--muted))]">{personalInfo.about}</p>
+            <p className="text-lg leading-8 text-[rgb(var(--muted))]">
+              My resume highlights automatic speech recognition, model application and training,
+              neural networks, reinforcement learning, low-level programming, Git/GitHub workflow,
+              and full-stack development with React, Next.js, Express, MongoDB, and JWT authentication.
+            </p>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {[
+                ['Education', 'Honors CS, University of Alberta'],
+                ['Internship', 'AI Intern at AISpeech'],
+                ['Location', 'Edmonton, Alberta']
+              ].map(([label, value]) => (
+                <div key={label} className="glass rounded-lg p-4">
+                  <div className="text-sm font-semibold text-[rgb(var(--accent))]">{label}</div>
+                  <div className="mt-2 text-sm leading-6 text-[rgb(var(--muted))]">{value}</div>
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="flex justify-center">
-            <div className="w-96 h-96 glass rounded-2xl flex items-center justify-center hacker-glow overflow-hidden">
-              {personalInfo.image ? (
-                <div className="w-full h-full relative">
-                  <img 
-                    src={personalInfo.image} 
-                    alt={personalInfo.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div className="text-center text-green-400">
-                      <h4 className="text-2xl font-bold mb-2">Security & AI</h4>
-                      <p className="text-green-300">Protecting digital assets</p>
-                      <div className="mt-4 text-sm text-green-500">
-                        Cybersecurity expert<br />
-                        Cryptography specialist<br />
-                        AI model trainer
-                      </div>
-                    </div>
-                  </div>
+          <div className="glass accent-glow overflow-hidden rounded-lg">
+            <div className="relative aspect-square">
+              <img
+                src={personalInfo.image}
+                alt={personalInfo.name}
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 flex items-end bg-gradient-to-t from-[rgb(var(--background))]/90 via-transparent to-transparent p-6">
+                <div>
+                  <h4 className="text-2xl font-bold text-[rgb(var(--text))]">{personalInfo.name}</h4>
+                  <p className="mt-2 text-[rgb(var(--accent))]">{personalInfo.subtitle}</p>
                 </div>
-              ) : (
-                <div className="text-center text-green-400">
-                  <div className="text-6xl mb-4">[G]</div>
-                  <h4 className="text-2xl font-bold mb-2">Security & AI</h4>
-                  <p className="text-green-300">Protecting digital assets</p>
-                  <div className="mt-4 text-sm text-green-500">
-                    Cybersecurity expert<br />
-                    Cryptography specialist<br />
-                    AI model trainer
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
           </div>
         </div>

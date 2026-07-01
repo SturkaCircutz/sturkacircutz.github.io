@@ -101,12 +101,12 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-[rgb(var(--background))]">
         <div className="text-center">
-          <div className="terminal-text text-green-400 text-xl mb-4">
-            &gt; LOADING SYSTEM...
+          <div className="terminal-text mb-4 text-xl text-[rgb(var(--accent))]">
+            &gt; LOADING PORTFOLIO...
           </div>
-          <div className="w-16 h-1 bg-green-400 mx-auto rounded-full animate-pulse"></div>
+          <div className="mx-auto h-1 w-16 animate-pulse rounded-full bg-[rgb(var(--accent))]"></div>
         </div>
       </div>
     );
@@ -117,7 +117,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-[rgb(var(--background))] text-[rgb(var(--text))]">
       <Navbar />
       <Hero />
       <About />

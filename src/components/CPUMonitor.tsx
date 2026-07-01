@@ -45,12 +45,6 @@ const CPUMonitor: React.FC = () => {
     usage: 50
   });
 
-  const [systemInfo, setSystemInfo] = useState({
-    platform: 'Unknown',
-    distro: 'Unknown',
-    hostname: 'localhost'
-  });
-
   const [isVisible, setIsVisible] = useState(false);
   const [isRealData, setIsRealData] = useState(false);
 
@@ -73,12 +67,6 @@ const CPUMonitor: React.FC = () => {
         used: data.memory.used,
         free: data.memory.free,
         usage: data.memory.usage
-      });
-      
-      setSystemInfo({
-        platform: data.system.platform,
-        distro: data.system.distro,
-        hostname: data.system.hostname
       });
       
       setIsRealData(true);
@@ -106,30 +94,23 @@ const CPUMonitor: React.FC = () => {
   }, []);
 
   const getUsageColor = (usage: number) => {
-    if (usage < 30) return 'text-green-400';
+    if (usage < 30) return 'text-[rgb(var(--accent))]';
     if (usage < 60) return 'text-yellow-400';
     if (usage < 80) return 'text-orange-400';
     return 'text-red-400';
   };
 
-  const getBarColor = (usage: number) => {
-    if (usage < 30) return 'bg-green-500';
-    if (usage < 60) return 'bg-yellow-500';
-    if (usage < 80) return 'bg-orange-500';
-    return 'bg-red-500';
-  };
-
   return (
-    <div className={`fixed top-4 right-4 z-50 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'}`}>
-      <div className="bg-black/90 backdrop-blur-sm border border-green-500/30 rounded-lg p-3 font-mono text-xs shadow-2xl w-64">
+    <div className={`fixed right-4 top-24 z-40 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'}`}>
+      <div className="w-64 rounded-lg border border-[rgb(var(--border))] bg-[rgb(var(--surface))]/90 p-3 font-mono text-xs shadow-2xl backdrop-blur-sm">
         {/* Title */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-1">
             <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${isRealData ? 'bg-green-500' : 'bg-red-500'}`}></div>
-            <span className="text-green-400 font-bold text-xs">SYS MONITOR</span>
-            {isRealData && <span className="text-xs text-green-300">LIVE</span>}
+            <span className="text-xs font-bold text-[rgb(var(--accent))]">SYS MONITOR</span>
+            {isRealData && <span className="text-xs text-[rgb(var(--accent-strong))]">LIVE</span>}
           </div>
-          <div className="text-gray-400 text-xs">
+          <div className="text-xs text-[rgb(var(--muted))]">
             {new Date().toLocaleTimeString()}
           </div>
         </div>
@@ -137,7 +118,7 @@ const CPUMonitor: React.FC = () => {
         {/* Overall CPU usage */}
         <div className="mb-3">
           <div className="flex justify-between items-center mb-1">
-            <span className="text-gray-300 text-xs">CPU</span>
+            <span className="text-xs text-[rgb(var(--muted))]">CPU</span>
             <span className={`font-bold text-xs ${getUsageColor(cpuData.usage)}`}>
               {cpuData.usage.toFixed(1)}%
             </span>
@@ -155,7 +136,7 @@ const CPUMonitor: React.FC = () => {
         {/* Memory usage */}
         <div className="mb-3">
           <div className="flex justify-between items-center mb-1">
-            <span className="text-gray-300 text-xs">RAM</span>
+            <span className="text-xs text-[rgb(var(--muted))]">RAM</span>
             <span className={`font-bold text-xs ${getUsageColor(memoryData.usage)}`}>
               {memoryData.usage.toFixed(1)}%
             </span>
@@ -168,7 +149,7 @@ const CPUMonitor: React.FC = () => {
               animated={true}
             />
           </div>
-          <div className="flex justify-between text-xs text-gray-400 mt-1">
+          <div className="mt-1 flex justify-between text-xs text-[rgb(var(--muted))]">
             <span>{memoryData.used.toFixed(1)}G</span>
             <span>{memoryData.total.toFixed(1)}G</span>
           </div>
@@ -176,11 +157,11 @@ const CPUMonitor: React.FC = () => {
 
         {/* Core usage */}
         <div className="mb-3">
-          <div className="text-gray-300 mb-1 text-xs">CORES</div>
+          <div className="mb-1 text-xs text-[rgb(var(--muted))]">CORES</div>
           <div className="grid grid-cols-4 gap-1">
             {cpuData.cores.slice(0, 4).map((core, index) => (
               <div key={index} className="text-center">
-                <div className="text-xs text-gray-400 mb-1">C{index + 1}</div>
+                <div className="mb-1 text-xs text-[rgb(var(--muted))]">C{index + 1}</div>
                 <div className="relative">
                   <KaliWaveChart 
                     value={core} 
@@ -200,26 +181,26 @@ const CPUMonitor: React.FC = () => {
         {/* System information */}
         <div className="space-y-1 text-xs">
           <div className="flex justify-between">
-            <span className="text-gray-400">TEMP:</span>
+            <span className="text-[rgb(var(--muted))]">TEMP:</span>
             <span className="text-yellow-400">{cpuData.temperature.toFixed(1)}°C</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-400">FREQ:</span>
+            <span className="text-[rgb(var(--muted))]">FREQ:</span>
             <span className="text-blue-400">{(cpuData.frequency / 1000).toFixed(1)}G</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-400">CORES:</span>
-            <span className="text-green-400">{cpuData.coresCount}</span>
+            <span className="text-[rgb(var(--muted))]">CORES:</span>
+            <span className="text-[rgb(var(--accent))]">{cpuData.coresCount}</span>
           </div>
         </div>
 
         {/* Bottom decorative line */}
-        <div className="mt-2 pt-1 border-t border-green-500/20">
+        <div className="mt-2 border-t border-[rgb(var(--border))] pt-1">
           <div className="flex space-x-1">
             {[...Array(10)].map((_, i) => (
               <div 
                 key={i}
-                className="w-1 h-1 bg-green-500/30 rounded-full animate-pulse"
+                className="h-1 w-1 animate-pulse rounded-full bg-[rgb(var(--accent))]/40"
                 style={{ animationDelay: `${i * 0.1}s` }}
               ></div>
             ))}

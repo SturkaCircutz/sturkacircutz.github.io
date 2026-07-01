@@ -1,252 +1,113 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { motion, useMotionValue, useSpring, useTransform, useDragControls } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { ExternalLink, Github } from 'lucide-react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { Project } from '@/types';
 
 interface CardProps {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  gradient: string;
-  tech: string[];
-  status: string;
+  project: Project;
   index: number;
 }
 
-const Interactive3DCard = ({ title, description, icon, gradient, tech, status, index }: CardProps) => {
+const Interactive3DCard = ({ project, index }: CardProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-  const dragControls = useDragControls();
-
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const mouseXSpring = useSpring(x, { stiffness: 220, damping: 28 });
+  const mouseYSpring = useSpring(y, { stiffness: 220, damping: 28 });
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['8deg', '-8deg']);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-8deg', '8deg']);
 
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["12deg", "-12deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-12deg", "12deg"]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current || isDragging) return;
-
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
+    x.set((event.clientX - rect.left) / rect.width - 0.5);
+    y.set((event.clientY - rect.top) / rect.height - 0.5);
   };
 
   const handleMouseLeave = () => {
-    if (!isDragging) {
-      x.set(0);
-      y.set(0);
-      setIsHovered(false);
-    }
-  };
-
-  const handleDragStart = () => {
-    setIsDragging(true);
+    x.set(0);
+    y.set(0);
     setIsHovered(false);
   };
 
-  const handleDragEnd = () => {
-    setIsDragging(false);
-  };
-
   return (
-    <motion.div
+    <motion.article
       ref={cardRef}
       onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      onMouseEnter={() => !isDragging && setIsHovered(true)}
-      drag
-      dragControls={dragControls}
-      dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }}
-      dragElastic={0.1}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      style={{
-        rotateY: isDragging ? 0 : rotateY,
-        rotateX: isDragging ? 0 : rotateX,
-        transformStyle: "preserve-3d",
-        x: isDragging ? undefined : 0,
-        y: isDragging ? undefined : 0,
-        transformOrigin: "center center",
-      }}
-      className="relative w-full h-80 perspective-1000 cursor-grab active:cursor-grabbing"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      whileDrag={{ 
-        scale: 1.05,
-        rotateZ: 5,
-        zIndex: 1000
-      }}
+      style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+      className="perspective-1000 h-full"
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.45, delay: index * 0.04 }}
     >
-      <motion.div
-        style={{
-          transformStyle: "preserve-3d",
-        }}
-        className="relative w-full h-full"
-      >
-        {/* Main Card */}
-        <motion.div
-          className={`relative w-full h-full glass rounded-2xl overflow-hidden hacker-glow cursor-pointer ${
-            isHovered ? 'shadow-2xl' : 'shadow-lg'
-          }`}
-          style={{
-            transform: "translateZ(0px)",
-            transformStyle: "preserve-3d",
-          }}
-          whileHover={{ scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        >
-          {/* Background Gradient */}
-          <div className={`absolute inset-0 ${gradient} opacity-20`} />
-          
-          {/* Matrix Background Effect */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-4 left-4 w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
-            <div className="absolute top-8 right-8 w-2 h-2 bg-cyan-400 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-            <div className="absolute bottom-4 left-1/3 w-1 h-1 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
-          </div>
-
-          {/* Content */}
-          <div className="relative z-10 p-6 h-full flex flex-col">
-            {/* Header */}
-            <div className="flex items-center justify-end mb-4">
-              <div className="text-right">
-                <div className="text-xs text-green-400 terminal-text mb-1">
-                  &gt; STATUS
-                </div>
-                <div className={`text-sm font-bold terminal-text ${
-                  status === 'IN_DEVELOPMENT' ? 'text-yellow-400' : 
-                  status === 'ACTIVE' ? 'text-green-400' : 'text-green-300'
-                }`}>
-                  {status}
-                </div>
-              </div>
-            </div>
-
-            {/* Title */}
-            <h3 className="text-xl font-bold text-green-400 terminal-text mb-3">
-              {title}
-            </h3>
-
-            {/* Description */}
-            <p className="text-green-300 text-sm leading-relaxed flex-1 terminal-text">
-              {description}
+      <div className="glass accent-glow relative flex h-full min-h-[25rem] flex-col overflow-hidden rounded-lg p-6 transition hover:-translate-y-1">
+        <div className="mb-5 flex items-start justify-between gap-4">
+          <div>
+            <p className="terminal-text text-xs font-bold uppercase text-[rgb(var(--accent))]">
+              {project.status ?? 'Public Repo'}
             </p>
-
-            {/* Tech Stack */}
-            <div className="mt-4">
-              <div className="text-xs text-green-400 terminal-text mb-2">
-                &gt; TECH_STACK
-              </div>
-              <div className="flex flex-wrap gap-1">
-                {tech.slice(0, 3).map((item, idx) => (
-                  <motion.span
-                    key={idx}
-                    className="px-2 py-1 bg-green-900/50 text-green-400 text-xs rounded border border-green-600 terminal-text"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  >
-                    {item}
-                  </motion.span>
-                ))}
-                {tech.length > 3 && (
-                  <span className="px-2 py-1 bg-gray-800 text-gray-400 text-xs rounded border border-gray-600 terminal-text">
-                    +{tech.length - 3}
-                  </span>
-                )}
-              </div>
-            </div>
+            <h3 className="mt-2 text-2xl font-bold text-[rgb(var(--text))]">{project.title}</h3>
           </div>
-
-          {/* Hover Overlay */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-br from-green-400/10 to-cyan-400/10 opacity-0"
-            animate={{ opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.3 }}
-          />
-
-          {/* Glow Effect */}
-          <motion.div
-            className="absolute inset-0 rounded-2xl"
-            style={{
-              background: `radial-gradient(circle at ${isHovered ? '50%' : '0%'} 50%, rgba(0, 255, 0, 0.1) 0%, transparent 50%)`,
-            }}
-            animate={{
-              opacity: isHovered ? 1 : 0,
-            }}
-            transition={{ duration: 0.3 }}
-          />
-        </motion.div>
-
-        {/* 3D Shadow */}
-        <motion.div
-          className="absolute inset-0 rounded-2xl bg-black/20"
-          style={{
-            transform: "translateZ(-10px)",
-            filter: "blur(20px)",
-          }}
-          animate={{
-            opacity: isHovered ? 0.8 : 0.4,
-            scale: isHovered ? 1.1 : 1,
-          }}
-          transition={{ duration: 0.3 }}
-        />
-      </motion.div>
-    </motion.div>
-  );
-};
-
-const Interactive3DCardGrid = () => {
-  const cards = [
-    {
-      title: "Java Security Framework",
-      description: "A comprehensive Java-based security framework for enterprise applications with advanced encryption and authentication mechanisms.",
-      icon: null,
-      gradient: "bg-gradient-to-br from-green-600 to-green-800",
-      tech: ["Java", "Spring Boot", "Spring Security", "JWT", "AES", "RSA"],
-      status: "IN_DEVELOPMENT"
-    },
-    {
-      title: "Cryptographic Library",
-      description: "Java library implementing various cryptographic algorithms including RSA, AES, and custom hash functions for secure data processing.",
-      icon: null,
-      gradient: "bg-gradient-to-br from-green-700 to-green-900",
-      tech: ["Java", "BouncyCastle", "JCA", "Maven", "JUnit", "Gradle"],
-      status: "ACTIVE"
-    },
-    {
-      title: "AI Threat Detection",
-      description: "Java-based machine learning system for real-time cybersecurity threat detection using neural networks and pattern recognition.",
-      icon: null,
-      gradient: "bg-gradient-to-br from-green-800 to-black",
-      tech: ["Java", "Weka", "TensorFlow", "Spring", "Kafka", "Redis"],
-      status: "DEPLOYED"
-    }
-  ];
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
-      {cards.map((card, index) => (
-        <div key={index} className="relative">
-          <Interactive3DCard
-            {...card}
-            index={index}
-          />
+          <div className="h-12 w-12 shrink-0 rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--surface-soft))] text-center text-xl font-black leading-[3rem] text-[rgb(var(--accent))]">
+            {String(index + 1).padStart(2, '0')}
+          </div>
         </div>
-      ))}
-    </div>
+
+        <p className="flex-1 text-sm leading-7 text-[rgb(var(--muted))]">{project.description}</p>
+
+        <div className="mt-5">
+          <p className="terminal-text mb-2 text-xs font-bold text-[rgb(var(--accent))]">&gt; STACK</p>
+          <div className="flex flex-wrap gap-2">
+            {project.technologies.map(item => (
+              <span
+                key={item}
+                className="rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--surface-soft))]/80 px-2 py-1 text-xs font-medium text-[rgb(var(--text))]"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          {project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-md bg-[rgb(var(--accent))] px-4 py-2 text-sm font-semibold text-slate-950 transition hover:brightness-110"
+            >
+              <Github size={16} aria-hidden="true" />
+              GitHub
+            </a>
+          )}
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-md border border-[rgb(var(--border))] px-4 py-2 text-sm font-semibold text-[rgb(var(--text))] transition hover:border-[rgb(var(--accent))] hover:text-[rgb(var(--accent))]"
+            >
+              <ExternalLink size={16} aria-hidden="true" />
+              Live
+            </a>
+          )}
+        </div>
+
+        <motion.div
+          className="pointer-events-none absolute inset-0 rounded-lg bg-[rgb(var(--accent))]/10"
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.2 }}
+        />
+      </div>
+    </motion.article>
   );
 };
 
-export default Interactive3DCardGrid;
+export default Interactive3DCard;

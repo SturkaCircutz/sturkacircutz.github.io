@@ -1,66 +1,71 @@
 'use client';
 
 import { skills } from '@/data/personalData';
+import { Skill } from '@/types';
+
+const categories: Array<{ id: Skill['category']; title: string; summary: string }> = [
+  {
+    id: 'machine-learning',
+    title: 'Machine Learning',
+    summary: 'ASR, model training, neural networks, and reinforcement learning.'
+  },
+  {
+    id: 'languages',
+    title: 'Languages',
+    summary: 'C/C++, CUDA, Triton, Python, TypeScript, RISC-V, and Emacs Lisp.'
+  },
+  {
+    id: 'web-backend',
+    title: 'Web & Backend',
+    summary: 'React, Next.js, Express, MongoDB, and JWT-authenticated applications.'
+  },
+  {
+    id: 'systems',
+    title: 'Systems',
+    summary: 'Low-level programming, Git/GitHub workflows, GPU programming, and Linux tooling.'
+  }
+];
 
 const Skills = () => {
-  const skillCategories = {
-    java: skills.filter(skill => skill.category === 'java'),
-    cybersecurity: skills.filter(skill => skill.category === 'cybersecurity'),
-    cryptography: skills.filter(skill => skill.category === 'cryptography')
-  };
-
   return (
-    <section id="skills" className="py-20 bg-black relative overflow-hidden">
-      {/* Matrix background effects */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-20 w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
-        <div className="absolute top-40 right-40 w-2 h-2 bg-cyan-400 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-20 left-1/3 w-1 h-1 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 right-20 w-1 h-1 bg-green-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-12">
-          <div className="inline-block">
-            <h2 className="text-3xl font-bold text-white mb-3">Skills & Expertise</h2>
-            <div className="w-12 h-0.5 bg-green-400 mx-auto rounded-full"></div>
-          </div>
+    <section id="skills" className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12 text-center">
+          <p className="terminal-text mb-3 text-sm font-semibold text-[rgb(var(--accent))]">&gt; RESUME_SKILLS</p>
+          <h2 className="text-4xl font-bold text-[rgb(var(--text))]">Technical Skills</h2>
+          <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-[rgb(var(--accent))]"></div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {Object.entries(skillCategories).map(([category, categorySkills]) => (
-            <div key={category} className="glass rounded-xl p-5 hacker-glow hover:scale-105 transition-transform duration-300">
-              <div className="text-center mb-5">
-                <div className="inline-block px-3 py-1 bg-green-400/10 rounded-full mb-3">
-                  <h3 className="text-sm font-bold text-green-400 uppercase tracking-wide">
-                    {category === 'java' ? 'Java Dev' : category === 'cybersecurity' ? 'Security' : 'Crypto'}
-                  </h3>
-                </div>
-              </div>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {categories.map(category => {
+            const categorySkills = skills.filter(skill => skill.category === category.id);
 
-              <div className="space-y-2.5">
-                {categorySkills.map((skill, index) => (
-                  <div key={skill.name} className="group relative">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-xs font-medium text-green-400 group-hover:text-green-300 transition-colors truncate pr-2">{skill.name}</span>
-                      <span className="text-xs text-cyan-400 font-mono">{skill.level}%</span>
-                    </div>
-                    <div className="relative w-full bg-gray-800/50 rounded-full h-1 overflow-hidden">
-                      <div
-                        className="h-full bg-green-400 rounded-full transition-all duration-1000 group-hover:bg-green-300 relative"
-                        style={{ width: `${skill.level}%` }}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/20 rounded-full"></div>
+            return (
+              <article key={category.id} className="glass accent-glow rounded-lg p-5">
+                <div className="mb-5">
+                  <h3 className="text-xl font-bold text-[rgb(var(--text))]">{category.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[rgb(var(--muted))]">{category.summary}</p>
+                </div>
+
+                <div className="space-y-4">
+                  {categorySkills.map(skill => (
+                    <div key={skill.name}>
+                      <div className="mb-1 flex items-center justify-between gap-3">
+                        <span className="truncate text-sm font-semibold text-[rgb(var(--text))]">{skill.name}</span>
+                        <span className="terminal-text text-xs text-[rgb(var(--accent))]">{skill.level}%</span>
+                      </div>
+                      <div className="h-2 overflow-hidden rounded-full bg-[rgb(var(--surface-soft))]">
+                        <div
+                          className="h-full rounded-full bg-[rgb(var(--accent))]"
+                          style={{ width: `${skill.level}%` }}
+                        />
                       </div>
                     </div>
-                    {skill.level >= 90 && (
-                      <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+                  ))}
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

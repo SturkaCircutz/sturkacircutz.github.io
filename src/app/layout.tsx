@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const geistSans = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist-sans",
+});
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+});
 
 export const metadata: Metadata = {
-  title: "Gustav James - Full Stack Developer | Cybersecurity Specialist",
-  description: "Professional full-stack developer specializing in secure digital solutions. Offering frontend development, backend development, cybersecurity, and network engineering services.",
-  keywords: "full stack development, frontend development, backend development, cybersecurity, network security, React, Next.js, TypeScript, Kali Linux, Node.js",
-  authors: [{ name: "Gustav James" }],
+  title: "Jiawen Sun - Machine Learning, Systems, and Web Engineering",
+  description: "Portfolio for Jiawen Sun, an Honors Computer Science student focused on machine learning, ASR, systems, GPU programming, and full-stack web projects.",
+  keywords: "Jiawen Sun, machine learning, ASR, reinforcement learning, CUDA, C++, Python, TypeScript, React, Next.js, Express, MongoDB",
+  authors: [{ name: "Jiawen Sun" }],
   openGraph: {
-    title: "Gustav James - Full Stack Developer",
-    description: "Professional full-stack developer specializing in secure digital solutions",
+    title: "Jiawen Sun - Portfolio",
+    description: "Machine learning, systems, GPU, and full-stack web projects by Jiawen Sun.",
     type: "website",
   },
 };
@@ -20,10 +27,10 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+  }>) {
   return (
-    <html lang="zh-CN">
-      <body className={inter.className}>
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
         {children}
       </body>
     </html>
