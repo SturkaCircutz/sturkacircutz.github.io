@@ -29,7 +29,7 @@ try {
       env: {
         ...process.env,
         GITHUB_PAGES: 'true',
-        NEXT_PUBLIC_BASE_PATH: '/personal_website',
+        NEXT_PUBLIC_BASE_PATH: '',
         NEXT_PUBLIC_STATIC_EXPORT: 'true',
       },
     }
