@@ -47,6 +47,7 @@ const CPUMonitor: React.FC = () => {
 
   const [isVisible, setIsVisible] = useState(false);
   const [isRealData, setIsRealData] = useState(false);
+  const isStaticExport = process.env.NEXT_PUBLIC_STATIC_EXPORT === 'true';
 
   // Get real system data
   const fetchSystemData = async () => {
@@ -78,6 +79,11 @@ const CPUMonitor: React.FC = () => {
 
   // Get real CPU data
   useEffect(() => {
+    if (isStaticExport) {
+      setIsRealData(false);
+      return;
+    }
+
     // Get data immediately once
     fetchSystemData();
     
@@ -85,7 +91,7 @@ const CPUMonitor: React.FC = () => {
     const interval = setInterval(fetchSystemData, 2000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isStaticExport]);
 
   // Show/hide animation
   useEffect(() => {

@@ -51,6 +51,7 @@ const Hero = () => {
   const scrollToSection = (selector: string) => {
     document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth' });
   };
+  const imageSrc = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}${personalInfo.image}`;
 
   return (
     <section id="home" className="relative min-h-screen overflow-hidden px-4 pb-20 pt-28 sm:px-6 lg:px-8">
@@ -112,7 +113,7 @@ const Hero = () => {
                   <div>
                     <div className="mb-5 h-28 w-28 overflow-hidden rounded-full border-2 border-[rgb(var(--accent))]">
                       <img
-                        src={personalInfo.image}
+                        src={imageSrc}
                         alt={personalInfo.name}
                         className="h-full w-full object-cover"
                       />

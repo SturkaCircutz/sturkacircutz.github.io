@@ -3,6 +3,8 @@
 import { personalInfo } from '@/data/personalData';
 
 const About = () => {
+  const imageSrc = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}${personalInfo.image}`;
+
   return (
     <section id="about" className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -41,7 +43,7 @@ const About = () => {
           <div className="glass accent-glow overflow-hidden rounded-lg">
             <div className="relative aspect-square">
               <img
-                src={personalInfo.image}
+                src={imageSrc}
                 alt={personalInfo.name}
                 className="h-full w-full object-cover"
               />

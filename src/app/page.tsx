@@ -15,6 +15,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSpamBlocked, setIsSpamBlocked] = useState(false);
   const refreshTimesRef = useRef<number[]>([]);
+  const isStaticExport = process.env.NEXT_PUBLIC_STATIC_EXPORT === 'true';
 
   // Check if refreshed more than 5 times in 10 seconds
   const checkSpamRefresh = () => {
@@ -125,7 +126,7 @@ export default function Home() {
       <Projects />
       <Contact />
       <Footer />
-      <CPUMonitor />
+      {!isStaticExport && <CPUMonitor />}
     </main>
   );
 }

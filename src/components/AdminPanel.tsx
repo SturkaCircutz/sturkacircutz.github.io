@@ -38,6 +38,7 @@ interface AdminData {
 }
 
 const AdminPanel = () => {
+  const isStaticExport = process.env.NEXT_PUBLIC_STATIC_EXPORT === 'true';
   const [data, setData] = useState<AdminData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -55,7 +56,7 @@ const AdminPanel = () => {
       } else {
         setError(result.error || 'Failed to fetch data');
       }
-    } catch (err) {
+    } catch {
       setError('Network error');
     } finally {
       setLoading(false);
@@ -76,14 +77,33 @@ const AdminPanel = () => {
       } else {
         alert(result.error || 'Failed to delete user');
       }
-    } catch (err) {
+    } catch {
       alert('Network error');
     }
   };
 
   useEffect(() => {
+    if (isStaticExport) {
+      setLoading(false);
+      return;
+    }
+
     fetchData(currentPage);
-  }, [currentPage]);
+  }, [currentPage, isStaticExport]);
+
+  if (isStaticExport) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black p-6">
+        <div className="max-w-lg text-center">
+          <h1 className="terminal-text mb-4 text-3xl font-bold text-white">&gt; ADMIN_UNAVAILABLE</h1>
+          <p className="leading-7 text-gray-400">
+            The admin database panel is only available on the server deployment.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
 
   if (loading) {
     return (

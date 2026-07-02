@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
 interface Message {
   _id: string;
@@ -24,6 +24,7 @@ interface MessageStats {
 }
 
 const MessagesPage = () => {
+  const isStaticExport = process.env.NEXT_PUBLIC_STATIC_EXPORT === 'true';
   const [messages, setMessages] = useState<Message[]>([]);
   const [stats, setStats] = useState<MessageStats>({
     totalMessages: 0,
@@ -36,11 +37,7 @@ const MessagesPage = () => {
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [filter, setFilter] = useState<'all' | 'new' | 'read' | 'replied' | 'archived'>('all');
 
-  useEffect(() => {
-    fetchMessages();
-  }, [filter]);
-
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/messages?status=${filter}`);
@@ -55,7 +52,29 @@ const MessagesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    if (isStaticExport) {
+      setLoading(false);
+      return;
+    }
+
+    fetchMessages();
+  }, [fetchMessages, isStaticExport]);
+
+  if (isStaticExport) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black p-6 text-white">
+        <div className="max-w-lg text-center">
+          <h1 className="mb-4 text-3xl font-bold">Message Management Unavailable</h1>
+          <p className="leading-7 text-gray-400">
+            The message database is only available on the server deployment.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const markAsRead = async (messageId: string) => {
     try {

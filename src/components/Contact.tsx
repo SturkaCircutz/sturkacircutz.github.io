@@ -16,6 +16,7 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const isStaticExport = process.env.NEXT_PUBLIC_STATIC_EXPORT === 'true';
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -24,6 +25,16 @@ const Contact = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (isStaticExport) {
+      const subject = encodeURIComponent(formData.subject || 'Portfolio contact');
+      const body = encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
+      );
+      window.location.href = `mailto:${contactInfo.email}?subject=${subject}&body=${body}`;
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
@@ -180,7 +191,7 @@ const Contact = () => {
                 ) : (
                   <>
                     <Send size={16} aria-hidden="true" />
-                    Send Message
+                    {isStaticExport ? 'Open Email' : 'Send Message'}
                   </>
                 )}
               </button>
