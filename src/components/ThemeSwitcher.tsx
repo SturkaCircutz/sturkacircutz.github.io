@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { Contrast, Moon, Palette } from 'lucide-react';
 
 const themes = [
+  { id: 'normal', label: 'Normal', icon: Palette },
   { id: 'dark', label: 'Dark', icon: Moon },
-  { id: 'minimal', label: 'Minimal', icon: Palette },
   { id: 'high-contrast', label: 'High Contrast', icon: Contrast }
 ] as const;
 
@@ -14,11 +14,11 @@ type ThemeId = (typeof themes)[number]['id'];
 const storageKey = 'jiawen-site-theme';
 
 const ThemeSwitcher = () => {
-  const [theme, setTheme] = useState<ThemeId>('dark');
+  const [theme, setTheme] = useState<ThemeId>('normal');
 
   useEffect(() => {
-    const stored = window.localStorage.getItem(storageKey) as ThemeId | null;
-    const nextTheme = themes.some(item => item.id === stored) ? stored : 'dark';
+    const stored = window.localStorage.getItem(storageKey);
+    const nextTheme = themes.some(item => item.id === stored) ? stored as ThemeId : 'normal';
     if (nextTheme) {
       setTheme(nextTheme);
       document.body.dataset.theme = nextTheme;

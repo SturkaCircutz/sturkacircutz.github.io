@@ -2,6 +2,17 @@
 
 @layer base {
   :root {
+    --background: 248 250 252;
+    --surface: 255 255 255;
+    --surface-soft: 241 245 249;
+    --text: 15 23 42;
+    --muted: 71 85 105;
+    --accent: 79 70 229;
+    --accent-strong: 20 184 166;
+    --border: 203 213 225;
+  }
+
+  body[data-theme="dark"] {
     --background: 8 12 20;
     --surface: 17 24 39;
     --surface-soft: 31 41 55;
@@ -12,7 +23,7 @@
     --border: 71 85 105;
   }
 
-  body[data-theme="minimal"] {
+  body[data-theme="normal"] {
     --background: 248 250 252;
     --surface: 255 255 255;
     --surface-soft: 241 245 249;

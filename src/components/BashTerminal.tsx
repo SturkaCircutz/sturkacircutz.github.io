@@ -12,7 +12,7 @@ type TerminalLine = {
 
 const prompt = 'jiawen@portfolio:~$';
 const sections = ['home', 'about', 'projects', 'skills', 'contact'];
-const validThemes = ['dark', 'minimal', 'high-contrast'];
+const validThemes = ['normal', 'dark', 'high-contrast'];
 
 const createLine = (text: string, tone?: TerminalLine['tone']): TerminalLine => ({
   id: Date.now() + Math.random(),
@@ -47,8 +47,8 @@ const BashTerminal = () => {
       'cd projects',
       'cd skills',
       'cd contact',
+      'theme normal',
       'theme dark',
-      'theme minimal',
       'theme high-contrast',
       'clear',
     ],
@@ -109,7 +109,7 @@ const BashTerminal = () => {
         '  open github   open GitHub profile',
         '  open linkedin open LinkedIn profile',
         '  open mail     start an email',
-        '  theme <name>  dark, minimal, high-contrast'
+        '  theme <name>  normal, dark, high-contrast'
       );
       return;
     }
