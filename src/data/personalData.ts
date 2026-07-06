@@ -8,7 +8,7 @@ export const personalInfo: PersonalInfo = {
     'I build machine-learning, speech, systems, and web projects across Python, C/C++, CUDA, TypeScript, React, Next.js, Express, and MongoDB.',
   about:
     'I am an Honors Computer Science student at the University of Alberta focused on machine learning, automatic speech recognition, reinforcement learning, GPU programming, and practical software systems. My recent work spans Mandarin pronunciation analysis, neural networks in C, programmatic-policy RL experiments, CUDA extension practice, and full-stack web applications.',
-  image: '/IMG_2391.jpeg',
+  image: '/lain-is-a-bear.jpg',
   stats: {
     projects: 3,
     experience: '2024-2028 CS',
