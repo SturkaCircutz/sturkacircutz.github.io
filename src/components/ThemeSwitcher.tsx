@@ -30,6 +30,18 @@ const ThemeSwitcher = () => {
     window.localStorage.setItem(storageKey, theme);
   }, [theme]);
 
+  useEffect(() => {
+    const handleThemeChange = (event: Event) => {
+      const nextTheme = (event as CustomEvent<ThemeId>).detail;
+      if (themes.some(item => item.id === nextTheme)) {
+        setTheme(nextTheme);
+      }
+    };
+
+    window.addEventListener('portfolio-theme-change', handleThemeChange);
+    return () => window.removeEventListener('portfolio-theme-change', handleThemeChange);
+  }, []);
+
   const currentIndex = themes.findIndex(item => item.id === theme);
   const currentTheme = themes[currentIndex] ?? themes[0];
   const Icon = currentTheme.icon;
@@ -45,10 +57,10 @@ const ThemeSwitcher = () => {
       onClick={cycleTheme}
       title={`Switch theme. Current: ${currentTheme.label}`}
       aria-label={`Switch theme. Current theme is ${currentTheme.label}`}
-      className="inline-flex h-10 min-w-32 items-center justify-center gap-2 rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--surface))]/90 px-3 text-sm font-semibold text-[rgb(var(--text))] shadow-lg shadow-black/10 backdrop-blur transition hover:border-[rgb(var(--accent))] hover:text-[rgb(var(--accent))] focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent))]"
+      className="inline-flex h-10 min-w-0 items-center justify-center gap-2 rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--surface))]/70 px-3 text-sm font-semibold text-[rgb(var(--text))] shadow-lg shadow-black/10 backdrop-blur transition hover:border-[rgb(var(--accent))] hover:text-[rgb(var(--accent))] focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent))] sm:min-w-32"
     >
       <Icon size={16} aria-hidden="true" />
-      <span>{currentTheme.label}</span>
+      <span className="hidden sm:inline">{currentTheme.label}</span>
     </button>
   );
 };

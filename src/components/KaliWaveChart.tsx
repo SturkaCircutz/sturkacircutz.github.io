@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 interface KaliWaveChartProps {
   value: number; // 0-100
@@ -19,7 +19,7 @@ const KaliWaveChart: React.FC<KaliWaveChartProps> = ({
   const animationRef = useRef<number | null>(null);
   const timeRef = useRef(0);
 
-  const getColorClass = (color: string) => {
+  const getColorClass = useCallback((color: string) => {
     switch (color) {
       case 'green': return 'rgb(var(--accent))';
       case 'yellow': return '#ffff00';
@@ -29,9 +29,9 @@ const KaliWaveChart: React.FC<KaliWaveChartProps> = ({
       case 'purple': return '#8800ff';
       default: return 'rgb(var(--accent))';
     }
-  };
+  }, []);
 
-  const drawWave = () => {
+  const drawWave = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -61,7 +61,7 @@ const KaliWaveChart: React.FC<KaliWaveChartProps> = ({
       { amplitude: waveHeight * normalizedValue * 0.4, frequency: 0.05, phase: Math.PI / 2, alpha: 0.4 },
     ];
 
-    layers.forEach((layer, layerIndex) => {
+    layers.forEach((layer) => {
       ctx.beginPath();
       ctx.strokeStyle = getColorClass(color);
       ctx.lineWidth = 2;
@@ -169,7 +169,7 @@ const KaliWaveChart: React.FC<KaliWaveChartProps> = ({
 
     // Reset transparency
     ctx.globalAlpha = 1;
-  };
+  }, [color, getColorClass, value]);
 
   useEffect(() => {
     if (!animated) {
@@ -190,7 +190,7 @@ const KaliWaveChart: React.FC<KaliWaveChartProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [value, animated, color]);
+  }, [animated, drawWave]);
 
   return (
     <div className="relative">

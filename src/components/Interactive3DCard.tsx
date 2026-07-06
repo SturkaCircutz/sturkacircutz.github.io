@@ -46,7 +46,8 @@ const Interactive3DCard = ({ project, index }: CardProps) => {
       viewport={{ once: true, margin: '-80px' }}
       transition={{ duration: 0.45, delay: index * 0.04 }}
     >
-      <div className="glass accent-glow relative flex h-full min-h-[25rem] flex-col overflow-hidden rounded-lg p-6 transition hover:-translate-y-1">
+      <div className="soft-panel relative flex h-full min-h-[25rem] flex-col overflow-hidden rounded-lg p-6 transition hover:-translate-y-1 hover:border-[rgb(var(--accent))]/70">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[rgb(var(--accent))] via-[rgb(var(--accent-strong))] to-transparent" />
         <div className="mb-5 flex items-start justify-between gap-4">
           <div>
             <p className="terminal-text text-xs font-bold uppercase text-[rgb(var(--accent))]">
@@ -54,7 +55,7 @@ const Interactive3DCard = ({ project, index }: CardProps) => {
             </p>
             <h3 className="mt-2 text-2xl font-bold text-[rgb(var(--text))]">{project.title}</h3>
           </div>
-          <div className="h-12 w-12 shrink-0 rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--surface-soft))] text-center text-xl font-black leading-[3rem] text-[rgb(var(--accent))]">
+          <div className="h-12 w-12 shrink-0 rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--background))]/35 text-center text-xl font-black leading-[3rem] text-[rgb(var(--accent))] shadow-inner">
             {String(index + 1).padStart(2, '0')}
           </div>
         </div>
@@ -67,7 +68,7 @@ const Interactive3DCard = ({ project, index }: CardProps) => {
             {project.technologies.map(item => (
               <span
                 key={item}
-                className="rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--surface-soft))]/80 px-2 py-1 text-xs font-medium text-[rgb(var(--text))]"
+                className="rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--background))]/35 px-2 py-1 text-xs font-medium text-[rgb(var(--text))]"
               >
                 {item}
               </span>

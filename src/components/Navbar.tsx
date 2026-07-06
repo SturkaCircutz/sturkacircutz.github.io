@@ -26,8 +26,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="glass fixed top-0 z-50 w-full">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <nav className="fixed top-0 z-50 w-full px-3 pt-3">
+      <div className="glass mx-auto max-w-7xl rounded-lg px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between gap-4">
           <div className="flex-shrink-0">
             <a 
@@ -40,7 +40,7 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:block">
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-3">
               {navItems.map((item) => (
                 <a
                   key={item.href}
@@ -70,7 +70,7 @@ const Navbar = () => {
 
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="glass mt-2 space-y-1 rounded-lg px-2 pb-3 pt-2 sm:px-3">
+            <div className="soft-panel mt-2 space-y-1 rounded-lg px-2 pb-3 pt-2 sm:px-3">
               {navItems.map((item) => (
                 <a
                   key={item.href}

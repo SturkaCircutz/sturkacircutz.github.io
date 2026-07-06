@@ -41,7 +41,7 @@ const Skills = () => {
             const categorySkills = skills.filter(skill => skill.category === category.id);
 
             return (
-              <article key={category.id} className="glass accent-glow rounded-lg p-5">
+              <article key={category.id} className="soft-panel rounded-lg p-5 transition hover:-translate-y-1 hover:border-[rgb(var(--accent))]/70">
                 <div className="mb-5">
                   <h3 className="text-xl font-bold text-[rgb(var(--text))]">{category.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-[rgb(var(--muted))]">{category.summary}</p>
@@ -54,9 +54,9 @@ const Skills = () => {
                         <span className="truncate text-sm font-semibold text-[rgb(var(--text))]">{skill.name}</span>
                         <span className="terminal-text text-xs text-[rgb(var(--accent))]">{skill.level}%</span>
                       </div>
-                      <div className="h-2 overflow-hidden rounded-full bg-[rgb(var(--surface-soft))]">
+                      <div className="h-2 overflow-hidden rounded-full bg-[rgb(var(--surface-soft))] shadow-inner">
                         <div
-                          className="h-full rounded-full bg-[rgb(var(--accent))]"
+                          className="h-full rounded-full bg-gradient-to-r from-[rgb(var(--accent))] to-[rgb(var(--accent-strong))]"
                           style={{ width: `${skill.level}%` }}
                         />
                       </div>

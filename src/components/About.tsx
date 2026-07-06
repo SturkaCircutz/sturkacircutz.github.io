@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { personalInfo } from '@/data/personalData';
 
 const About = () => {
@@ -32,7 +33,7 @@ const About = () => {
                 ['Internship', 'AI Intern at AISpeech'],
                 ['Location', 'Edmonton, Alberta']
               ].map(([label, value]) => (
-                <div key={label} className="glass rounded-lg p-4">
+                <div key={label} className="soft-panel rounded-lg p-4">
                   <div className="text-sm font-semibold text-[rgb(var(--accent))]">{label}</div>
                   <div className="mt-2 text-sm leading-6 text-[rgb(var(--muted))]">{value}</div>
                 </div>
@@ -40,14 +41,16 @@ const About = () => {
             </div>
           </div>
 
-          <div className="glass accent-glow overflow-hidden rounded-lg">
+          <div className="plastic-card overflow-hidden rounded-lg p-2">
             <div className="relative aspect-square">
-              <img
+              <Image
                 src={imageSrc}
                 alt={personalInfo.name}
-                className="h-full w-full object-cover"
+                width={800}
+                height={800}
+                className="h-full w-full rounded-md object-cover"
               />
-              <div className="absolute inset-0 flex items-end bg-gradient-to-t from-[rgb(var(--background))]/90 via-transparent to-transparent p-6">
+              <div className="absolute inset-2 flex items-end rounded-md bg-gradient-to-t from-[rgb(var(--background))]/90 via-transparent to-transparent p-6">
                 <div>
                   <h4 className="text-2xl font-bold text-[rgb(var(--text))]">{personalInfo.name}</h4>
                   <p className="mt-2 text-[rgb(var(--accent))]">{personalInfo.subtitle}</p>

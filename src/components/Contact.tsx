@@ -86,7 +86,7 @@ const Contact = () => {
               [Linkedin, 'LinkedIn', 'jiawen-sun-952a02408', contactInfo.social.linkedin ?? '']
             ] satisfies ContactRow[]).map(([Icon, label, value, href]) => {
               const content = (
-                <div className="glass flex items-center gap-4 rounded-lg p-4 transition hover:border-[rgb(var(--accent))]">
+                <div className="soft-panel flex items-center gap-4 rounded-lg p-4 transition hover:-translate-y-0.5 hover:border-[rgb(var(--accent))]">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[rgb(var(--accent))]/15 text-[rgb(var(--accent))]">
                     <Icon size={20} aria-hidden="true" />
                   </div>
@@ -107,7 +107,7 @@ const Contact = () => {
             })}
           </div>
 
-          <div className="glass accent-glow rounded-lg p-6 sm:p-8">
+          <div className="plastic-card rounded-lg p-6 sm:p-8">
             <h3 className="terminal-text mb-6 text-xl font-bold text-[rgb(var(--text))]">&gt; SEND_MESSAGE</h3>
 
             {submitStatus === 'success' && (
