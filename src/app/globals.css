@@ -65,6 +65,10 @@ button {
   color: var(--paper);
 }
 
+.reference-site.menu-is-open {
+  overflow: hidden;
+}
+
 .reference-site.is-paused *,
 .reference-site.is-paused *::before,
 .reference-site.is-paused *::after {
@@ -114,13 +118,11 @@ button {
   text-transform: uppercase;
 }
 
-.ref-links a,
-.ref-mobile-menu a {
+.ref-links a {
   position: relative;
 }
 
-.ref-links a::after,
-.ref-mobile-menu a::after {
+.ref-links a::after {
   position: absolute;
   right: 0;
   bottom: -0.35rem;
@@ -133,8 +135,7 @@ button {
   transition: transform 180ms ease;
 }
 
-.ref-links a:hover::after,
-.ref-mobile-menu a:hover::after {
+.ref-links a:hover::after {
   transform: scaleX(1);
   transform-origin: left;
 }
@@ -155,6 +156,15 @@ button {
   border: 1px solid var(--line);
   background: rgba(13, 15, 13, 0.64);
   backdrop-filter: blur(16px);
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.ref-icon-button:hover,
+.ref-menu-button:hover,
+.ref-menu-button[aria-expanded="true"] {
+  border-color: rgba(241, 238, 230, 0.5);
+  background: rgba(241, 238, 230, 0.14);
+  transform: translateY(-1px);
 }
 
 .ref-icon-button {
@@ -164,27 +174,6 @@ button {
 .ref-menu-button {
   padding: 0 1rem;
   font-size: 0.78rem;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.ref-mobile-menu {
-  position: absolute;
-  top: calc(100% - 0.4rem);
-  right: clamp(1rem, 2.2vw, 2rem);
-  display: none;
-  min-width: 14rem;
-  border: 1px solid var(--line);
-  background: rgba(13, 15, 13, 0.94);
-  padding: 0.85rem;
-  color: var(--paper);
-  backdrop-filter: blur(18px);
-}
-
-.ref-mobile-menu a {
-  display: block;
-  padding: 0.8rem 0.35rem;
-  font-size: 0.82rem;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -199,6 +188,164 @@ button {
     linear-gradient(180deg, #111410 0%, #0d0f0d 68%, #0b0c0b 100%);
   color: var(--paper);
   isolation: isolate;
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(30rem, 0.78fr);
+  gap: clamp(1rem, 4vw, 4rem);
+  overflow: hidden;
+  padding: clamp(6rem, 10vw, 8rem) clamp(1rem, 3.5vw, 4rem) clamp(1rem, 3vw, 3rem);
+  background:
+    radial-gradient(circle at 17% 20%, rgba(145, 130, 216, 0.32), transparent 24rem),
+    radial-gradient(circle at 82% 64%, rgba(255, 95, 98, 0.2), transparent 22rem),
+    rgba(13, 15, 13, 0.96);
+  color: var(--paper);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-1.4rem);
+  transition: opacity 260ms ease, transform 360ms cubic-bezier(0.2, 0.72, 0, 1);
+}
+
+.menu-overlay::before,
+.menu-overlay::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+}
+
+.menu-overlay::before {
+  background:
+    linear-gradient(rgba(241, 238, 230, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(241, 238, 230, 0.035) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.75), transparent);
+}
+
+.menu-overlay::after {
+  right: -18vw;
+  left: -18vw;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(127, 218, 209, 0.9), rgba(255, 95, 98, 0.68), transparent);
+  filter: blur(1px);
+  transform: translateY(42vh) rotate(-8deg);
+  animation: menuBeam 4.8s ease-in-out infinite alternate;
+}
+
+.menu-is-open .menu-overlay {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.menu-ascii {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: rgba(241, 238, 230, 0.035);
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.48);
+}
+
+.menu-ascii pre {
+  margin: -0.04rem 0;
+  color: rgba(241, 238, 230, 0.82);
+  font-size: clamp(0.58rem, 1.25vw, 1.25rem);
+  font-weight: 900;
+  line-height: 1.1;
+  text-align: center;
+  transform: translateX(-1.2rem);
+  animation: asciiPulse 2.4s ease-in-out infinite alternate;
+}
+
+.menu-ascii pre:nth-child(2n) {
+  animation-delay: -0.45s;
+}
+
+.menu-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid var(--line);
+  background: rgba(13, 15, 13, 0.6);
+  padding: clamp(1.2rem, 3vw, 2.4rem);
+  backdrop-filter: blur(18px);
+}
+
+.menu-meta,
+.menu-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--paper-dim);
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.menu-links {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.menu-links a {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  align-items: end;
+  gap: 1rem;
+  border-top: 1px solid rgba(241, 238, 230, 0.18);
+  padding: clamp(0.9rem, 1.4vw, 1.25rem) 0;
+  opacity: 0;
+  transform: translateY(1.4rem);
+}
+
+.menu-is-open .menu-links a {
+  animation: menuItemIn 520ms cubic-bezier(0.2, 0.72, 0, 1) forwards;
+  animation-delay: calc(var(--item) * 70ms + 110ms);
+}
+
+.menu-links a:last-child {
+  border-bottom: 1px solid rgba(241, 238, 230, 0.18);
+}
+
+.menu-links span {
+  color: var(--paper-dim);
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.menu-links strong {
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: clamp(2.8rem, 4.9vw, 5.4rem);
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 0.86;
+  text-transform: uppercase;
+  white-space: nowrap;
+  word-break: keep-all;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.menu-links a:hover strong {
+  color: var(--cyan);
+  transform: translateX(0.35rem);
+}
+
+.menu-footer a,
+.menu-footer button {
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-transform: uppercase;
 }
 
 .hero-stage::before {
@@ -259,6 +406,69 @@ button {
   background: linear-gradient(90deg, transparent, rgba(145, 130, 216, 0.72), rgba(255, 95, 98, 0.48), transparent);
   transform: rotate(-4deg);
   animation-delay: -3s;
+}
+
+.orbit-field {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.orbit-field span {
+  position: absolute;
+  display: block;
+  width: clamp(7rem, 13vw, 15rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(241, 238, 230, 0.16);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 38% 32%, rgba(241, 238, 230, 0.25), transparent 0.5rem),
+    radial-gradient(circle at 50% 50%, rgba(127, 218, 209, 0.14), transparent 52%);
+  filter: blur(0.2px);
+  opacity: 0.62;
+  animation: orbitDrift 14s ease-in-out infinite alternate;
+}
+
+.orbit-field span:nth-child(1) {
+  top: 20%;
+  left: 7%;
+}
+
+.orbit-field span:nth-child(2) {
+  top: 15%;
+  right: 18%;
+  width: clamp(4rem, 8vw, 9rem);
+  animation-delay: -4s;
+}
+
+.orbit-field span:nth-child(3) {
+  right: 12%;
+  bottom: 22%;
+  width: clamp(5rem, 10vw, 11rem);
+  animation-delay: -8s;
+}
+
+.ascii-rain {
+  position: absolute;
+  top: 10%;
+  right: 5%;
+  z-index: 0;
+  width: min(34rem, 42vw);
+  overflow: hidden;
+  color: rgba(241, 238, 230, 0.14);
+  pointer-events: none;
+  transform: rotate(1deg);
+}
+
+.ascii-rain pre {
+  margin: 0;
+  font-size: clamp(0.55rem, 0.9vw, 0.95rem);
+  font-weight: 900;
+  line-height: 1.4;
+  white-space: pre;
+  animation: rainShift 3.2s steps(4) infinite;
 }
 
 .side-badge {
@@ -322,6 +532,7 @@ button {
 
 .hero-copy {
   max-width: 57rem;
+  animation: contentRise 760ms cubic-bezier(0.2, 0.72, 0, 1) both;
 }
 
 .eyebrow {
@@ -390,6 +601,7 @@ button {
   overflow: hidden;
   border: 1px solid var(--line);
   background: rgba(13, 15, 13, 0.64);
+  animation: visualEnter 900ms cubic-bezier(0.2, 0.72, 0, 1) 120ms both;
 }
 
 .visual-frame {
@@ -409,6 +621,28 @@ button {
   object-fit: cover;
   filter: grayscale(1) contrast(1.2);
   mix-blend-mode: luminosity;
+  transform: scale(1.08);
+  animation: portraitDrift 11s ease-in-out infinite alternate;
+}
+
+.visual-ascii {
+  position: absolute;
+  inset: 5% 8% auto 8%;
+  z-index: 2;
+  color: rgba(241, 238, 230, 0.68);
+  pointer-events: none;
+  transform: translateY(0);
+  mix-blend-mode: screen;
+  animation: verticalScroll 9s linear infinite;
+}
+
+.visual-ascii pre {
+  margin: -0.02rem 0;
+  font-size: clamp(0.46rem, 0.82vw, 0.86rem);
+  font-weight: 900;
+  line-height: 1.16;
+  text-align: center;
+  white-space: pre;
 }
 
 .signal-field {
@@ -438,6 +672,7 @@ button {
     linear-gradient(90deg, rgba(241, 238, 230, 0.04) 1px, transparent 1px);
   background-size: 0.65rem 0.65rem;
   opacity: 0.45;
+  animation: scanGrid 5s linear infinite;
 }
 
 .signal-field::after {
@@ -478,6 +713,7 @@ button {
   align-items: end;
   border-top: 1px solid var(--line);
   padding-top: 1rem;
+  animation: contentRise 760ms cubic-bezier(0.2, 0.72, 0, 1) 180ms both;
 }
 
 .hero-bottom div {
@@ -510,6 +746,18 @@ button {
   overflow: hidden;
   background: var(--paper);
   color: var(--ink);
+}
+
+.work-index::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    linear-gradient(110deg, transparent 0 32%, rgba(13, 15, 13, 0.05) 32.2% 33%, transparent 33.2%),
+    repeating-linear-gradient(90deg, rgba(13, 15, 13, 0.035) 0 1px, transparent 1px 4rem);
+  opacity: 0.55;
+  pointer-events: none;
+  animation: paperSweep 12s linear infinite;
 }
 
 .section-rule {
@@ -547,6 +795,14 @@ button {
   font-size: clamp(1rem, 1.55vw, 1.65rem);
   font-weight: 900;
   text-transform: uppercase;
+  transition: background 180ms ease, color 180ms ease, padding 180ms ease;
+}
+
+.work-row:hover {
+  background: var(--ink);
+  color: var(--paper);
+  padding-right: 1rem;
+  padding-left: 1rem;
 }
 
 .work-row:last-child {
@@ -576,6 +832,13 @@ button {
   flex-direction: column;
   background: var(--paper);
   padding: clamp(1.2rem, 2vw, 2rem);
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.feature-work article:hover {
+  background: var(--ink);
+  color: var(--paper);
+  transform: translateY(-0.4rem);
 }
 
 .feature-meta {
@@ -605,6 +868,11 @@ button {
   font-family: var(--font-geist-sans), Arial, sans-serif;
   font-size: 1rem;
   line-height: 1.58;
+}
+
+.feature-work article:hover p,
+.feature-work article:hover .feature-meta {
+  color: rgba(241, 238, 230, 0.72);
 }
 
 .tag-line {
@@ -864,6 +1132,118 @@ button {
   }
 }
 
+@keyframes menuBeam {
+  from {
+    opacity: 0.34;
+    transform: translateY(30vh) rotate(-11deg) scaleX(0.7);
+  }
+  to {
+    opacity: 0.86;
+    transform: translateY(56vh) rotate(-4deg) scaleX(1.08);
+  }
+}
+
+@keyframes menuItemIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes asciiPulse {
+  from {
+    opacity: 0.44;
+    transform: translateX(-1.2rem) skewX(-3deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(1.2rem) skewX(3deg);
+  }
+}
+
+@keyframes orbitDrift {
+  from {
+    transform: translate3d(-1.4rem, 0.6rem, 0) scale(0.92);
+  }
+  to {
+    transform: translate3d(1.8rem, -1rem, 0) scale(1.08);
+  }
+}
+
+@keyframes rainShift {
+  0% {
+    opacity: 0.1;
+    transform: translateY(-0.6rem);
+  }
+  50% {
+    opacity: 0.22;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translateY(0.6rem);
+  }
+}
+
+@keyframes contentRise {
+  from {
+    opacity: 0;
+    transform: translateY(1.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes visualEnter {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem) rotateX(8deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+@keyframes portraitDrift {
+  from {
+    transform: scale(1.08) translate3d(-1.2%, -0.8%, 0);
+  }
+  to {
+    transform: scale(1.14) translate3d(1.5%, 1%, 0);
+  }
+}
+
+@keyframes verticalScroll {
+  from {
+    opacity: 0.44;
+    transform: translateY(-3%);
+  }
+  to {
+    opacity: 0.8;
+    transform: translateY(7%);
+  }
+}
+
+@keyframes scanGrid {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0.65rem 0.65rem;
+  }
+}
+
+@keyframes paperSweep {
+  from {
+    background-position: -20vw 0, 0 0;
+  }
+  to {
+    background-position: 120vw 0, 4rem 0;
+  }
+}
+
 @keyframes beamPulse {
   0%,
   100% {
@@ -914,8 +1294,18 @@ button {
     display: none;
   }
 
-  .ref-mobile-menu {
-    display: block;
+  .menu-overlay {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .menu-ascii {
+    min-height: 15rem;
+    order: 2;
+  }
+
+  .menu-panel {
+    min-height: 32rem;
   }
 
   .hero-grid,
@@ -978,6 +1368,32 @@ button {
   }
 
   .side-badge {
+    display: none;
+  }
+
+  .menu-overlay {
+    padding: 5rem 0.85rem 1rem;
+  }
+
+  .menu-panel {
+    min-height: 30rem;
+    padding: 1rem;
+  }
+
+  .menu-links a {
+    grid-template-columns: 3rem minmax(0, 1fr);
+  }
+
+  .menu-links strong {
+    font-size: clamp(2.1rem, 10.4vw, 3.35rem);
+  }
+
+  .menu-meta,
+  .menu-footer {
+    flex-wrap: wrap;
+  }
+
+  .ascii-rain {
     display: none;
   }
 

@@ -6,10 +6,10 @@ import { ArrowUpRight, Github, Linkedin, Mail, Menu, Pause, Play, X } from 'luci
 import { contactInfo, personalInfo, projects, skills } from '@/data/personalData';
 
 const navItems = [
-  { label: 'work', href: '#work' },
-  { label: 'capabilities', href: '#capabilities' },
-  { label: 'about', href: '#about' },
-  { label: 'contact', href: '#contact' }
+  { label: 'work', menuLabel: 'work', href: '#work' },
+  { label: 'capabilities', menuLabel: 'capability', href: '#capabilities' },
+  { label: 'about', menuLabel: 'about', href: '#about' },
+  { label: 'contact', menuLabel: 'contact', href: '#contact' }
 ];
 
 const serviceGroups = [
@@ -40,6 +40,25 @@ const heroStats = [
   ['Track', personalInfo.stats.experience]
 ];
 
+const asciiRows = [
+  '!!<<>>===+++////::::----........----',
+  ' !<<>>===+++////::::----........---',
+  '  !<<>>==+++////::::---........---',
+  '   !<>>==++////::::---.......---',
+  '    !<>==++///::::---......---',
+  '     ?<>==+///:::---.....---',
+  '      ?<>=+//:::--....---',
+  '       ?<=+//::--...---',
+  '        ?>++/:--..--',
+  '         ?:--',
+  '          .',
+  '         ?:--',
+  '        ?>++/:--..--',
+  '       ?<>=+//:::--...---',
+  '     33?!!<<>>===+++////::::---',
+  '   522II33??!!<<>>===++++////::::----'
+];
+
 function scrollToTarget(href: string) {
   document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
 }
@@ -60,8 +79,13 @@ export default function ReferenceLanding() {
 
   const imageSrc = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}${personalInfo.image ?? '/IMG_2391.jpeg'}`;
 
+  const closeMenuAndScroll = (href: string) => {
+    scrollToTarget(href);
+    setMenuOpen(false);
+  };
+
   return (
-    <main className={`reference-site ${motionPaused ? 'is-paused' : ''}`}>
+    <main className={`reference-site ${motionPaused ? 'is-paused' : ''} ${menuOpen ? 'menu-is-open' : ''}`}>
       <header className="ref-nav" aria-label="Main navigation">
         <a
           href="#home"
@@ -103,34 +127,63 @@ export default function ReferenceLanding() {
             type="button"
             className="ref-menu-button"
             onClick={() => setMenuOpen(value => !value)}
-            aria-label="Toggle menu"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            aria-controls="site-menu"
           >
             <span>MENU</span>
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
+      </header>
 
-        {menuOpen && (
-          <div className="ref-mobile-menu">
-            {navItems.map(item => (
+      <div id="site-menu" className="menu-overlay" aria-hidden={!menuOpen}>
+        <div className="menu-ascii" aria-hidden="true">
+          {asciiRows.map((row, index) => (
+            <pre key={`${row}-${index}`}>{row}</pre>
+          ))}
+        </div>
+        <nav className="menu-panel" aria-label="Menu navigation">
+          <div className="menu-meta">
+            <span>MENU / 2026</span>
+            <span>YEG / CA</span>
+          </div>
+          <div className="menu-links">
+            {navItems.map((item, index) => (
               <a
                 key={item.href}
                 href={item.href}
+                style={{ '--item': index } as React.CSSProperties}
                 onClick={event => {
                   event.preventDefault();
-                  scrollToTarget(item.href);
-                  setMenuOpen(false);
+                  closeMenuAndScroll(item.href);
                 }}
               >
-                {item.label}
+                <span>{String(index + 1).padStart(3, '0')}</span>
+                <strong>{item.menuLabel}</strong>
               </a>
             ))}
           </div>
-        )}
-      </header>
+          <div className="menu-footer">
+            <a href={contactInfo.social.github} target="_blank" rel="noreferrer">github</a>
+            <a href={`mailto:${contactInfo.email}`}>email</a>
+            <button type="button" onClick={() => setMenuOpen(false)}>close</button>
+          </div>
+        </nav>
+      </div>
 
       <section id="home" className="hero-stage" aria-labelledby="hero-title">
         <div className="scene-grid" aria-hidden="true" />
+        <div className="orbit-field" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="ascii-rain" aria-hidden="true">
+          {asciiRows.slice(0, 10).map((row, index) => (
+            <pre key={`${row}-${index}`}>{row}</pre>
+          ))}
+        </div>
         <aside className="side-badge side-badge-left">portfolio / local build</aside>
         <aside className="side-badge side-badge-right">machine learning</aside>
 
@@ -162,6 +215,11 @@ export default function ReferenceLanding() {
             <div className="hero-visual" aria-label="Portfolio portrait and signal study">
               <div className="visual-frame">
                 <Image src={imageSrc} alt={personalInfo.name} width={720} height={900} priority />
+              </div>
+              <div className="visual-ascii" aria-hidden="true">
+                {asciiRows.map((row, index) => (
+                  <pre key={`${row}-${index}`}>{row}</pre>
+                ))}
               </div>
               <div className="signal-field" aria-hidden="true" />
               <button type="button" onClick={() => scrollToTarget('#work')} className="ascii-play">
