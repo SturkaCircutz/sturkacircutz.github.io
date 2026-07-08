@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
-import { ArrowUpRight, Github, Linkedin, Mail, Menu, Pause, Play, X } from 'lucide-react';
+import { ArrowUpRight, Github, Linkedin, Mail, Pause, Play, X } from 'lucide-react';
 import { contactInfo, personalInfo, projects, skills } from '@/data/personalData';
 
 const navItems = [
@@ -123,17 +123,21 @@ export default function ReferenceLanding() {
           >
             {motionPaused ? <Play size={18} /> : <Pause size={18} />}
           </button>
-          <button
-            type="button"
+          <a
+            href={menuOpen ? '#home' : '#site-menu'}
             className="ref-menu-button"
-            onClick={() => setMenuOpen(value => !value)}
+            onClick={event => {
+              event.preventDefault();
+              setMenuOpen(value => !value);
+            }}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
             aria-controls="site-menu"
           >
             <span>MENU</span>
-            {menuOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
+            <X size={18} className="menu-close-icon" />
+            <span className="menu-hamburger" aria-hidden="true" />
+          </a>
         </div>
       </header>
 
@@ -167,7 +171,12 @@ export default function ReferenceLanding() {
           <div className="menu-footer">
             <a href={contactInfo.social.github} target="_blank" rel="noreferrer">github</a>
             <a href={`mailto:${contactInfo.email}`}>email</a>
-            <button type="button" onClick={() => setMenuOpen(false)}>close</button>
+            <a
+              href="#home"
+              onClick={() => setMenuOpen(false)}
+            >
+              close
+            </a>
           </div>
         </nav>
       </div>
