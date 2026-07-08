@@ -638,58 +638,39 @@ button {
   animation: visualEnter 900ms cubic-bezier(0.2, 0.72, 0, 1) 120ms both;
 }
 
-.visual-frame {
+.visual-screencast {
   position: absolute;
-  top: 7%;
-  right: 7%;
-  bottom: 30%;
-  left: 47%;
+  inset: 0;
+  z-index: 1;
   overflow: hidden;
-  border: 1px solid rgba(241, 238, 230, 0.26);
-  background: var(--ink-soft);
-}
-
-.visual-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(1) contrast(1.2);
-  mix-blend-mode: luminosity;
-  transform: scale(1.08);
-  animation: portraitDrift 11s ease-in-out infinite alternate;
-}
-
-.visual-ascii {
-  position: absolute;
-  inset: 5% 8% auto 8%;
-  z-index: 2;
-  color: rgba(241, 238, 230, 0.68);
+  background: #0d0f0d;
   pointer-events: none;
-  transform: translateY(0);
-  mix-blend-mode: screen;
-  animation: verticalScroll 9s linear infinite;
 }
 
-.visual-ascii pre {
-  margin: -0.02rem 0;
-  font-size: clamp(0.46rem, 0.82vw, 0.86rem);
-  font-weight: 900;
-  line-height: 1.16;
-  text-align: center;
-  white-space: pre;
+.visual-screencast video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 182%;
+  height: 182%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.18) brightness(1.14);
+  transform: translate(-50%, -50%);
 }
 
 .signal-field {
   position: absolute;
   inset: 0;
+  z-index: 3;
   display: grid;
   place-items: center;
   overflow: hidden;
   background:
-    radial-gradient(circle at 22% 24%, rgba(145, 130, 216, 0.26), transparent 14rem),
-    radial-gradient(circle at 72% 64%, rgba(255, 95, 98, 0.16), transparent 15rem);
+    radial-gradient(circle at 22% 24%, rgba(145, 130, 216, 0.16), transparent 14rem),
+    radial-gradient(circle at 72% 64%, rgba(255, 95, 98, 0.12), transparent 15rem);
   box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.52);
   perspective: 800px;
+  pointer-events: none;
 }
 
 .signal-field::before,
@@ -705,7 +686,7 @@ button {
     linear-gradient(rgba(241, 238, 230, 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(241, 238, 230, 0.04) 1px, transparent 1px);
   background-size: 0.65rem 0.65rem;
-  opacity: 0.45;
+  opacity: 0.2;
   animation: scanGrid 5s linear infinite;
 }
 
@@ -715,30 +696,9 @@ button {
   left: 0;
   height: 1px;
   background: rgba(127, 218, 209, 0.72);
+  opacity: 0.52;
   transform: rotate(-9deg);
   animation: beamPulse 5s ease-in-out infinite;
-}
-
-.ascii-play {
-  position: absolute;
-  z-index: 5;
-  right: 50%;
-  bottom: 33%;
-  display: grid;
-  width: 4.6rem;
-  height: 4.6rem;
-  place-items: center;
-  border: 1px solid rgba(241, 238, 230, 0.38);
-  border-radius: 999px;
-  background: var(--paper);
-  color: var(--ink);
-  transform: translate(50%, 50%);
-  transition: transform 180ms ease, background 180ms ease;
-}
-
-.ascii-play:hover {
-  background: #fff;
-  transform: translate(50%, 50%) scale(1.06);
 }
 
 .hero-bottom {
@@ -1240,26 +1200,6 @@ button {
   }
 }
 
-@keyframes portraitDrift {
-  from {
-    transform: scale(1.08) translate3d(-1.2%, -0.8%, 0);
-  }
-  to {
-    transform: scale(1.14) translate3d(1.5%, 1%, 0);
-  }
-}
-
-@keyframes verticalScroll {
-  from {
-    opacity: 0.44;
-    transform: translateY(-3%);
-  }
-  to {
-    opacity: 0.8;
-    transform: translateY(7%);
-  }
-}
-
 @keyframes scanGrid {
   from {
     background-position: 0 0;
@@ -1361,10 +1301,6 @@ button {
     justify-self: stretch;
     width: 100%;
     min-height: 32rem;
-  }
-
-  .visual-frame {
-    left: 54%;
   }
 
   .feature-work,
@@ -1471,16 +1407,9 @@ button {
     min-height: 25rem;
   }
 
-  .visual-frame {
-    top: 8%;
-    right: 7%;
-    bottom: 48%;
-    left: 50%;
-  }
-
-  .ascii-play {
-    width: 3.8rem;
-    height: 3.8rem;
+  .visual-screencast video {
+    width: 210%;
+    height: 210%;
   }
 
   .hero-bottom {

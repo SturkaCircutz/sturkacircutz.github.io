@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowUpRight, Github, Linkedin, Mail, Pause, Play, X } from 'lucide-react';
 import { contactInfo, personalInfo, projects, skills } from '@/data/personalData';
 
@@ -66,6 +66,7 @@ function scrollToTarget(href: string) {
 export default function ReferenceLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [motionPaused, setMotionPaused] = useState(false);
+  const signalVideoRef = useRef<HTMLVideoElement>(null);
 
   const skillStrip = useMemo(
     () =>
@@ -77,7 +78,24 @@ export default function ReferenceLanding() {
     []
   );
 
-  const imageSrc = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}${personalInfo.image ?? '/IMG_2391.jpeg'}`;
+  const assetBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+  const imageSrc = `${assetBasePath}${personalInfo.image ?? '/IMG_2391.jpeg'}`;
+  const signalVideoSrc = `${assetBasePath}/ascii-signal-animation.webm`;
+
+  useEffect(() => {
+    const video = signalVideoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    if (motionPaused) {
+      video.pause();
+      return;
+    }
+
+    void video.play().catch(() => undefined);
+  }, [motionPaused]);
 
   const closeMenuAndScroll = (href: string) => {
     scrollToTarget(href);
@@ -222,18 +240,18 @@ export default function ReferenceLanding() {
             </div>
 
             <div className="hero-visual" aria-label="Portfolio portrait and signal study">
-              <div className="visual-frame">
-                <Image src={imageSrc} alt={personalInfo.name} width={720} height={900} priority />
-              </div>
-              <div className="visual-ascii" aria-hidden="true">
-                {asciiRows.map((row, index) => (
-                  <pre key={`${row}-${index}`}>{row}</pre>
-                ))}
+              <div className="visual-screencast" aria-hidden="true">
+                <video
+                  ref={signalVideoRef}
+                  src={signalVideoSrc}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                />
               </div>
               <div className="signal-field" aria-hidden="true" />
-              <button type="button" onClick={() => scrollToTarget('#work')} className="ascii-play">
-                <Play size={16} />
-              </button>
             </div>
           </div>
 
