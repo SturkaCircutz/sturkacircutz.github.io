@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ArrowUpRight, Github, Linkedin, Mail, Pause, Play, X } from 'lucide-react';
 import { contactInfo, personalInfo, projects, skills } from '@/data/personalData';
 
@@ -40,24 +40,40 @@ const heroStats = [
   ['Track', personalInfo.stats.experience]
 ];
 
-const asciiRows = [
-  '!!<<>>===+++////::::----........----',
-  ' !<<>>===+++////::::----........---',
-  '  !<<>>==+++////::::---........---',
-  '   !<>>==++////::::---.......---',
-  '    !<>==++///::::---......---',
-  '     ?<>==+///:::---.....---',
-  '      ?<>=+//:::--....---',
-  '       ?<=+//::--...---',
-  '        ?>++/:--..--',
-  '         ?:--',
-  '          .',
-  '         ?:--',
-  '        ?>++/:--..--',
-  '       ?<>=+//:::--...---',
-  '     33?!!<<>>===+++////::::---',
-  '   522II33??!!<<>>===++++////::::----'
+const nameSignalRows = [
+  'JIAWEN SUN  //  MACHINE LEARNING',
+  '  JIAWEN.SUN  ::  ASR SYSTEMS WEB',
+  '    JSUN 313721325  ::  YEG CA',
+  '      JIAWEN  ->  PYTHON C++ CUDA',
+  '        SUN  ->  NEXT REACT TS',
+  '          JIAWEN SUN  ::  RL NN GPU',
+  '        SUN  ->  MONGODB API AUTH',
+  '      JIAWEN  ->  LOW LEVEL CODE',
+  '    JSUN 313721325  ::  UALBERTA',
+  '  JIAWEN.SUN  ::  BUILD SHIP LEARN',
+  'JIAWEN SUN  //  PORTFOLIO 2026'
 ];
+
+const heroGlyphs = [
+  { label: 'JS', x: '11%', y: '18%' },
+  { label: 'JIA', x: '24%', y: '31%' },
+  { label: 'SUN', x: '76%', y: '18%' },
+  { label: 'ASR', x: '85%', y: '38%' },
+  { label: 'ML', x: '12%', y: '62%' },
+  { label: 'C++', x: '32%', y: '74%' },
+  { label: 'CUDA', x: '70%', y: '67%' },
+  { label: 'TS', x: '52%', y: '24%' },
+  { label: 'YEG', x: '88%', y: '78%' },
+  { label: 'RL', x: '45%', y: '86%' },
+  { label: 'NN', x: '58%', y: '48%' },
+  { label: 'WEB', x: '20%', y: '84%' },
+  { label: 'GPU', x: '38%', y: '12%' },
+  { label: 'API', x: '66%', y: '34%' },
+  { label: 'PY', x: '8%', y: '42%' },
+  { label: 'NEXT', x: '80%', y: '58%' }
+] as const;
+
+type IntroState = 'idle' | 'running' | 'complete';
 
 function scrollToTarget(href: string) {
   document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
@@ -66,7 +82,7 @@ function scrollToTarget(href: string) {
 export default function ReferenceLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [motionPaused, setMotionPaused] = useState(false);
-  const signalVideoRef = useRef<HTMLVideoElement>(null);
+  const [introState, setIntroState] = useState<IntroState>('idle');
 
   const skillStrip = useMemo(
     () =>
@@ -80,22 +96,21 @@ export default function ReferenceLanding() {
 
   const assetBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
   const imageSrc = `${assetBasePath}${personalInfo.image ?? '/IMG_2391.jpeg'}`;
-  const signalVideoSrc = `${assetBasePath}/ascii-signal-animation.webm`;
 
   useEffect(() => {
-    const video = signalVideoRef.current;
-
-    if (!video) {
+    if (introState !== 'running') {
       return;
     }
 
-    if (motionPaused) {
-      video.pause();
-      return;
-    }
+    const timeout = window.setTimeout(() => {
+      setIntroState('complete');
+    }, 2800);
 
-    void video.play().catch(() => undefined);
-  }, [motionPaused]);
+    return () => window.clearTimeout(timeout);
+  }, [introState]);
+
+  const introComplete = introState === 'complete';
+  const introRunning = introState === 'running';
 
   const closeMenuAndScroll = (href: string) => {
     scrollToTarget(href);
@@ -103,7 +118,44 @@ export default function ReferenceLanding() {
   };
 
   return (
-    <main className={`reference-site ${motionPaused ? 'is-paused' : ''} ${menuOpen ? 'menu-is-open' : ''}`}>
+    <main className={`reference-site intro-${introState} ${motionPaused ? 'is-paused' : ''} ${menuOpen ? 'menu-is-open' : ''}`}>
+      <button
+        type="button"
+        className={`intro-gate ${introRunning ? 'is-running' : ''}`}
+        onClick={() => {
+          if (introState === 'idle') {
+            setIntroState('running');
+          }
+        }}
+        aria-disabled={introState !== 'idle'}
+        aria-hidden={introComplete}
+        aria-label="Run Jiawen Sun portfolio intro"
+        tabIndex={introComplete ? -1 : 0}
+      >
+        <span className="intro-corner intro-corner-top">JIAWEN SUN / PORTFOLIO</span>
+        <span className="intro-corner intro-corner-bottom">ML / ASR / SYSTEMS / WEB</span>
+        <span className="intro-signal-rows" aria-hidden="true">
+          {[...nameSignalRows, ...nameSignalRows].map((row, index) => (
+            <span key={`intro-${row}-${index}`}>{row}</span>
+          ))}
+        </span>
+        <span className="intro-glyph-field" aria-hidden="true">
+          {heroGlyphs.map((glyph, index) => (
+            <span
+              key={`intro-${glyph.label}-${index}`}
+              style={{ '--x': glyph.x, '--y': glyph.y, '--glyph': index } as React.CSSProperties}
+            >
+              {glyph.label}
+            </span>
+          ))}
+        </span>
+        <span className="intro-name-lockup">
+          <span>JIAWEN</span>
+          <span>SUN</span>
+        </span>
+      </button>
+
+      <div className="portfolio-shell" aria-hidden={!introComplete} inert={introComplete ? undefined : true}>
       <header className="ref-nav" aria-label="Main navigation">
         <a
           href="#home"
@@ -161,7 +213,7 @@ export default function ReferenceLanding() {
 
       <div id="site-menu" className="menu-overlay" aria-hidden={!menuOpen}>
         <div className="menu-ascii" aria-hidden="true">
-          {asciiRows.map((row, index) => (
+          {nameSignalRows.map((row, index) => (
             <pre key={`${row}-${index}`}>{row}</pre>
           ))}
         </div>
@@ -207,8 +259,18 @@ export default function ReferenceLanding() {
           <span />
         </div>
         <div className="ascii-rain" aria-hidden="true">
-          {asciiRows.slice(0, 10).map((row, index) => (
+          {nameSignalRows.map((row, index) => (
             <pre key={`${row}-${index}`}>{row}</pre>
+          ))}
+        </div>
+        <div className="hero-glyph-field" aria-hidden="true">
+          {heroGlyphs.map((glyph, index) => (
+            <span
+              key={`${glyph.label}-${index}`}
+              style={{ '--x': glyph.x, '--y': glyph.y, '--glyph': index } as React.CSSProperties}
+            >
+              {glyph.label}
+            </span>
           ))}
         </div>
         <aside className="side-badge side-badge-left">portfolio / local build</aside>
@@ -240,16 +302,21 @@ export default function ReferenceLanding() {
             </div>
 
             <div className="hero-visual" aria-label="Portfolio portrait and signal study">
-              <div className="visual-screencast" aria-hidden="true">
-                <video
-                  ref={signalVideoRef}
-                  src={signalVideoSrc}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="auto"
-                />
+              <div className="name-signal" aria-hidden="true">
+                <div className="name-signal-core">
+                  <span>JIAWEN</span>
+                  <strong>SUN</strong>
+                </div>
+                <div className="name-signal-rows">
+                  {nameSignalRows.map((row, index) => (
+                    <span key={`visual-${row}-${index}`}>{row}</span>
+                  ))}
+                </div>
+                <div className="name-signal-tags">
+                  {['ML', 'ASR', 'CUDA', 'NEXT', 'REACT', 'C++'].map(tag => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </div>
               </div>
               <div className="signal-field" aria-hidden="true" />
             </div>
@@ -386,6 +453,7 @@ export default function ReferenceLanding() {
           </a>
         </div>
       </section>
+      </div>
     </main>
   );
 }
