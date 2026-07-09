@@ -1,9 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import { PointerEvent, useEffect, useMemo, useState } from 'react';
+import { PointerEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowUpRight, Github, Linkedin, Mail, Pause, Play, X } from 'lucide-react';
 import { contactInfo, personalInfo, projects, skills } from '@/data/personalData';
+import { DecryptText, useTextDecrypt } from '@/hooks/useTextDecrypt';
 
 const navItems = [
   { label: 'work', menuLabel: 'work', href: '#work' },
@@ -90,6 +91,7 @@ export default function ReferenceLanding() {
   const [motionPaused, setMotionPaused] = useState(false);
   const [introState, setIntroState] = useState<IntroState>('idle');
   const [pointer, setPointer] = useState({ x: 50, y: 50 });
+  const siteRef = useRef<HTMLElement>(null);
 
   const skillStrip = useMemo(
     () =>
@@ -103,6 +105,8 @@ export default function ReferenceLanding() {
 
   const assetBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
   const imageSrc = `${assetBasePath}${personalInfo.image ?? '/IMG_2391.jpeg'}`;
+
+  useTextDecrypt(siteRef);
 
   useEffect(() => {
     if (introState !== 'running') {
@@ -143,6 +147,7 @@ export default function ReferenceLanding() {
 
   return (
     <main
+      ref={siteRef}
       className={`reference-site intro-${introState} ${motionPaused ? 'is-paused' : ''} ${menuOpen ? 'menu-is-open' : ''}`}
       style={interactiveStyle}
       onPointerMove={updatePointer}
@@ -161,8 +166,8 @@ export default function ReferenceLanding() {
         tabIndex={introComplete ? -1 : 0}
       >
         <span className="intro-spotlight" aria-hidden="true" />
-        <span className="intro-corner intro-corner-top">JIAWEN SUN / PORTFOLIO</span>
-        <span className="intro-corner intro-corner-bottom">ML / ASR / SYSTEMS / WEB</span>
+        <span className="intro-corner intro-corner-top"><DecryptText>JIAWEN SUN / PORTFOLIO</DecryptText></span>
+        <span className="intro-corner intro-corner-bottom"><DecryptText>ML / ASR / SYSTEMS / WEB</DecryptText></span>
         <span className="intro-ring-field" aria-hidden="true">
           {introRings.map(index => (
             <span key={`intro-ring-${index}`} style={{ '--ring': index } as React.CSSProperties} />
@@ -178,7 +183,7 @@ export default function ReferenceLanding() {
             <span key={`intro-particle-${index}`} style={{ '--particle': index } as React.CSSProperties} />
           ))}
         </span>
-        <span className="intro-glyph-field" aria-hidden="true">
+        <span className="intro-glyph-field" aria-hidden="true" data-no-decrypt>
           {heroGlyphs.map((glyph, index) => (
             <span
               key={`intro-${glyph.label}-${index}`}
@@ -189,12 +194,13 @@ export default function ReferenceLanding() {
           ))}
         </span>
         <span className="intro-name-lockup">
-          <span>JIAWEN</span>
-          <span>SUN</span>
+          <span><DecryptText>JIAWEN</DecryptText></span>
+          <span><DecryptText>SUN</DecryptText></span>
         </span>
       </button>
 
       <div className="portfolio-shell" aria-hidden={!introComplete} inert={introComplete ? undefined : true}>
+      <DecryptText>
       <header className="ref-nav" aria-label="Main navigation">
         <a
           href="#home"
@@ -251,7 +257,7 @@ export default function ReferenceLanding() {
       </header>
 
       <div id="site-menu" className="menu-overlay" aria-hidden={!menuOpen}>
-        <div className="menu-ascii" aria-hidden="true">
+        <div className="menu-ascii" aria-hidden="true" data-no-decrypt>
           {nameSignalRows.map((row, index) => (
             <pre key={`${row}-${index}`}>{row}</pre>
           ))}
@@ -297,12 +303,12 @@ export default function ReferenceLanding() {
           <span />
           <span />
         </div>
-        <div className="ascii-rain" aria-hidden="true">
+        <div className="ascii-rain" aria-hidden="true" data-no-decrypt>
           {nameSignalRows.map((row, index) => (
             <pre key={`${row}-${index}`}>{row}</pre>
           ))}
         </div>
-        <div className="hero-glyph-field" aria-hidden="true">
+        <div className="hero-glyph-field" aria-hidden="true" data-no-decrypt>
           {heroGlyphs.map((glyph, index) => (
             <span
               key={`${glyph.label}-${index}`}
@@ -356,7 +362,7 @@ export default function ReferenceLanding() {
                   <span>JIAWEN</span>
                   <strong>SUN</strong>
                 </div>
-                <div className="name-signal-rows">
+                <div className="name-signal-rows" data-no-decrypt>
                   {nameSignalRows.map((row, index) => (
                     <span key={`visual-${row}-${index}`}>{row}</span>
                   ))}
@@ -522,6 +528,7 @@ export default function ReferenceLanding() {
           </a>
         </div>
       </section>
+      </DecryptText>
       </div>
     </main>
   );

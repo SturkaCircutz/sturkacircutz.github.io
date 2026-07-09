@@ -59,6 +59,18 @@ button {
   color: var(--ink);
 }
 
+.decrypt-word {
+  display: inline-block;
+  width: var(--decrypt-word-width, auto);
+  white-space: nowrap;
+}
+
+.decrypt-letter {
+  display: inline-block;
+  width: var(--decrypt-letter-width, auto);
+  text-align: center;
+}
+
 .reference-site {
   min-height: 100vh;
   background: var(--ink);
@@ -199,7 +211,7 @@ button {
   transition: transform 140ms ease-out;
 }
 
-.intro-ring-field span {
+.intro-ring-field > span {
   position: absolute;
   top: var(--pointer-y);
   left: var(--pointer-x);
@@ -213,15 +225,15 @@ button {
   animation-delay: calc(var(--ring) * -520ms);
 }
 
-.intro-ring-field span::before,
-.intro-ring-field span::after {
+.intro-ring-field > span::before,
+.intro-ring-field > span::after {
   position: absolute;
   content: "";
   border-radius: 999px;
   pointer-events: none;
 }
 
-.intro-ring-field span::before {
+.intro-ring-field > span::before {
   top: 12%;
   left: 50%;
   width: 0.5rem;
@@ -230,7 +242,7 @@ button {
   box-shadow: 0 0 1.2rem rgba(127, 218, 209, 0.82);
 }
 
-.intro-ring-field span::after {
+.intro-ring-field > span::after {
   right: 18%;
   bottom: 8%;
   width: 0.36rem;
@@ -239,7 +251,7 @@ button {
   box-shadow: 0 0 1rem rgba(255, 95, 98, 0.74);
 }
 
-.intro-gate.is-running .intro-ring-field span {
+.intro-gate.is-running .intro-ring-field > span {
   animation: introRingRun 640ms cubic-bezier(0.2, 0.72, 0, 1) 4;
   animation-delay: calc(var(--ring) * 65ms);
 }
@@ -280,22 +292,22 @@ button {
   transform: skewY(-2deg);
 }
 
-.intro-signal-rows span {
+.intro-signal-rows > span {
   display: block;
   animation: introRowsIdle 2.8s steps(4) infinite;
 }
 
-.intro-signal-rows span:nth-child(3n + 1) {
+.intro-signal-rows > span:nth-child(3n + 1) {
   color: rgba(127, 218, 209, 0.34);
   animation-delay: -0.6s;
 }
 
-.intro-signal-rows span:nth-child(3n + 2) {
+.intro-signal-rows > span:nth-child(3n + 2) {
   color: rgba(255, 95, 98, 0.24);
   animation-delay: -1.2s;
 }
 
-.intro-gate.is-running .intro-signal-rows span {
+.intro-gate.is-running .intro-signal-rows > span {
   animation: introRowsRun 620ms steps(6) 4;
 }
 
@@ -306,7 +318,7 @@ button {
   pointer-events: none;
 }
 
-.intro-particle-field span {
+.intro-particle-field > span {
   position: absolute;
   top: var(--pointer-y);
   left: var(--pointer-x);
@@ -323,15 +335,15 @@ button {
     scale(0.2);
 }
 
-.intro-particle-field span:nth-child(3n) {
+.intro-particle-field > span:nth-child(3n) {
   background: var(--cyan);
 }
 
-.intro-particle-field span:nth-child(3n + 1) {
+.intro-particle-field > span:nth-child(3n + 1) {
   background: var(--coral);
 }
 
-.intro-gate.is-running .intro-particle-field span {
+.intro-gate.is-running .intro-particle-field > span {
   animation: particleBurst 880ms cubic-bezier(0.18, 0.74, 0.1, 1) 3;
   animation-delay: calc(var(--particle) * 18ms);
 }
@@ -344,8 +356,8 @@ button {
   pointer-events: none;
 }
 
-.intro-glyph-field span,
-.hero-glyph-field span {
+.intro-glyph-field > span,
+.hero-glyph-field > span {
   position: absolute;
   top: var(--y);
   left: var(--x);
@@ -365,7 +377,7 @@ button {
   animation-delay: calc(var(--glyph) * -330ms);
 }
 
-.intro-glyph-field span {
+.intro-glyph-field > span {
   transform:
     translate(-50%, -50%)
     translate(
@@ -375,12 +387,12 @@ button {
   transition: transform 120ms ease-out, border-color 160ms ease, color 160ms ease;
 }
 
-.intro-gate:hover .intro-glyph-field span {
+.intro-gate:hover .intro-glyph-field > span {
   border-color: rgba(127, 218, 209, 0.48);
   color: rgba(241, 238, 230, 0.92);
 }
 
-.intro-gate.is-running .intro-glyph-field span {
+.intro-gate.is-running .intro-glyph-field > span {
   animation: glyphRun 680ms cubic-bezier(0.2, 0.72, 0, 1) 4;
   animation-delay: calc(var(--glyph) * 22ms);
 }
@@ -411,17 +423,17 @@ button {
   transition: transform 140ms ease-out;
 }
 
-.intro-name-lockup span {
+.intro-name-lockup > span {
   display: block;
   animation: introNameIdle 2.6s ease-in-out infinite alternate;
 }
 
-.intro-name-lockup span:last-child {
+.intro-name-lockup > span:last-child {
   color: var(--coral);
   animation-delay: -1.2s;
 }
 
-.intro-gate.is-running .intro-name-lockup span {
+.intro-gate.is-running .intro-name-lockup > span {
   animation: introNameRun 840ms cubic-bezier(0.2, 0.72, 0, 1) 3 forwards;
 }
 
@@ -701,7 +713,7 @@ button {
   border-bottom: 1px solid rgba(241, 238, 230, 0.18);
 }
 
-.menu-links span {
+.menu-links a > span {
   color: var(--paper-dim);
   font-size: 0.85rem;
   font-weight: 900;
@@ -1046,7 +1058,7 @@ button {
   transition: transform 140ms ease-out;
 }
 
-.name-signal-orbits span {
+.name-signal-orbits > span {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1060,7 +1072,7 @@ button {
   animation-delay: calc(var(--ring) * -840ms);
 }
 
-.name-signal-orbits span::before {
+.name-signal-orbits > span::before {
   position: absolute;
   top: 9%;
   left: 50%;
@@ -1080,7 +1092,7 @@ button {
   pointer-events: none;
 }
 
-.name-signal-lines span {
+.name-signal-lines > span {
   position: absolute;
   top: calc(12% + var(--line) * 11%);
   left: -20%;
@@ -1118,7 +1130,7 @@ button {
   transition: transform 140ms ease-out;
 }
 
-.name-signal-core span,
+.name-signal-core > span,
 .name-signal-core strong {
   display: block;
   font: inherit;
@@ -1145,12 +1157,12 @@ button {
   transform: skewY(-4deg);
 }
 
-.name-signal-rows span {
+.name-signal-rows > span {
   display: block;
   animation: rainShift 3.2s steps(4) infinite;
 }
 
-.name-signal-rows span:nth-child(2n) {
+.name-signal-rows > span:nth-child(2n) {
   color: rgba(127, 218, 209, 0.42);
   animation-delay: -1.2s;
 }
@@ -1164,7 +1176,7 @@ button {
   gap: 0.38rem;
 }
 
-.name-signal-tags span {
+.name-signal-tags > span {
   border: 1px solid rgba(241, 238, 230, 0.22);
   background: rgba(13, 15, 13, 0.52);
   padding: 0.32rem 0.45rem;
@@ -1175,7 +1187,7 @@ button {
   animation: tagFlicker 3.4s steps(1) infinite;
 }
 
-.name-signal-tags span:nth-child(2n) {
+.name-signal-tags > span:nth-child(2n) {
   animation-delay: -1.2s;
 }
 
@@ -1184,7 +1196,7 @@ button {
   opacity: 0.44;
 }
 
-.hero-glyph-field span {
+.hero-glyph-field > span {
   border-color: rgba(241, 238, 230, 0.12);
   background: rgba(13, 15, 13, 0.2);
   color: rgba(241, 238, 230, 0.34);
@@ -1256,7 +1268,7 @@ button {
   text-align: right;
 }
 
-.hero-bottom span:first-child {
+.hero-bottom div > span:first-child {
   color: var(--paper-dim);
 }
 
@@ -1412,13 +1424,13 @@ button {
   border-bottom: 1px solid var(--line-dark);
 }
 
-.work-row span:nth-child(3),
-.work-row span:last-child {
+.work-row > span:nth-child(3),
+.work-row > span:last-child {
   color: rgba(13, 15, 13, 0.55);
   font-size: clamp(0.72rem, 0.9vw, 0.86rem);
 }
 
-.work-row span:last-child {
+.work-row > span:last-child {
   text-align: right;
 }
 
@@ -1520,7 +1532,7 @@ button {
   margin-top: 1.4rem;
 }
 
-.tag-line span {
+.tag-line > span {
   border: 1px solid currentColor;
   padding: 0.32rem 0.48rem;
   font-size: 0.68rem;
@@ -1796,7 +1808,7 @@ button {
   animation: marquee 32s linear infinite;
 }
 
-.skill-marquee span {
+.skill-marquee div > span {
   font-weight: 900;
   text-transform: uppercase;
   white-space: nowrap;
@@ -1897,7 +1909,7 @@ button {
   z-index: 1;
 }
 
-.contact-link span {
+.contact-link > span {
   font-size: 0.78rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -2466,7 +2478,7 @@ button {
 }
 
 @media (max-width: 980px) {
-  .intro-ring-field span {
+  .intro-ring-field > span {
     width: calc(7rem + var(--ring) * 4rem);
   }
 
@@ -2475,7 +2487,7 @@ button {
     font-size: clamp(0.64rem, 1.8vw, 0.95rem);
   }
 
-  .intro-glyph-field span {
+  .intro-glyph-field > span {
     min-width: 2rem;
     min-height: 1.45rem;
   }
@@ -2565,15 +2577,15 @@ button {
     text-align: left;
   }
 
-  .intro-glyph-field span:nth-child(n + 10) {
+  .intro-glyph-field > span:nth-child(n + 10) {
     display: none;
   }
 
-  .intro-ring-field span {
+  .intro-ring-field > span {
     width: calc(5.8rem + var(--ring) * 2.9rem);
   }
 
-  .intro-particle-field span {
+  .intro-particle-field > span {
     width: 0.18rem;
   }
 
@@ -2596,7 +2608,7 @@ button {
     padding: 0 0.72rem;
   }
 
-  .ref-menu-button span {
+  .ref-menu-button > span {
     display: none;
   }
 
@@ -2683,11 +2695,11 @@ button {
     inset: 0.75rem 0.75rem auto;
   }
 
-  .name-signal-orbits span {
+  .name-signal-orbits > span {
     width: calc(8.5rem + var(--ring) * 3.1rem);
   }
 
-  .name-signal-lines span {
+  .name-signal-lines > span {
     left: -40%;
     width: 180%;
   }
@@ -2729,8 +2741,8 @@ button {
     grid-template-columns: 3.5rem minmax(0, 1fr);
   }
 
-  .work-row span:nth-child(3),
-  .work-row span:last-child {
+  .work-row > span:nth-child(3),
+  .work-row > span:last-child {
     display: none;
   }
 
