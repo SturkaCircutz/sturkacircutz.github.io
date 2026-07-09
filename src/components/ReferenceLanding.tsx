@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useState } from 'react';
+import { PointerEvent, useEffect, useMemo, useState } from 'react';
 import { ArrowUpRight, Github, Linkedin, Mail, Pause, Play, X } from 'lucide-react';
 import { contactInfo, personalInfo, projects, skills } from '@/data/personalData';
 
@@ -73,6 +73,10 @@ const heroGlyphs = [
   { label: 'NEXT', x: '80%', y: '58%' }
 ] as const;
 
+const introParticles = Array.from({ length: 26 }, (_, index) => index);
+const introRings = Array.from({ length: 5 }, (_, index) => index);
+const heroScanLines = Array.from({ length: 7 }, (_, index) => index);
+
 type IntroState = 'idle' | 'running' | 'complete';
 
 function scrollToTarget(href: string) {
@@ -83,6 +87,7 @@ export default function ReferenceLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [motionPaused, setMotionPaused] = useState(false);
   const [introState, setIntroState] = useState<IntroState>('idle');
+  const [pointer, setPointer] = useState({ x: 50, y: 50 });
 
   const skillStrip = useMemo(
     () =>
@@ -111,6 +116,23 @@ export default function ReferenceLanding() {
 
   const introComplete = introState === 'complete';
   const introRunning = introState === 'running';
+  const interactiveStyle = {
+    '--pointer-x': `${pointer.x}%`,
+    '--pointer-y': `${pointer.y}%`,
+    '--pointer-shift-x': `${(pointer.x - 50) / 50}`,
+    '--pointer-shift-y': `${(pointer.y - 50) / 50}`
+  } as React.CSSProperties;
+
+  const updatePointer = (event: PointerEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+    setPointer({
+      x: Math.min(100, Math.max(0, x)),
+      y: Math.min(100, Math.max(0, y))
+    });
+  };
 
   const closeMenuAndScroll = (href: string) => {
     scrollToTarget(href);
@@ -118,7 +140,11 @@ export default function ReferenceLanding() {
   };
 
   return (
-    <main className={`reference-site intro-${introState} ${motionPaused ? 'is-paused' : ''} ${menuOpen ? 'menu-is-open' : ''}`}>
+    <main
+      className={`reference-site intro-${introState} ${motionPaused ? 'is-paused' : ''} ${menuOpen ? 'menu-is-open' : ''}`}
+      style={interactiveStyle}
+      onPointerMove={updatePointer}
+    >
       <button
         type="button"
         className={`intro-gate ${introRunning ? 'is-running' : ''}`}
@@ -132,11 +158,22 @@ export default function ReferenceLanding() {
         aria-label="Run Jiawen Sun portfolio intro"
         tabIndex={introComplete ? -1 : 0}
       >
+        <span className="intro-spotlight" aria-hidden="true" />
         <span className="intro-corner intro-corner-top">JIAWEN SUN / PORTFOLIO</span>
         <span className="intro-corner intro-corner-bottom">ML / ASR / SYSTEMS / WEB</span>
+        <span className="intro-ring-field" aria-hidden="true">
+          {introRings.map(index => (
+            <span key={`intro-ring-${index}`} style={{ '--ring': index } as React.CSSProperties} />
+          ))}
+        </span>
         <span className="intro-signal-rows" aria-hidden="true">
           {[...nameSignalRows, ...nameSignalRows].map((row, index) => (
             <span key={`intro-${row}-${index}`}>{row}</span>
+          ))}
+        </span>
+        <span className="intro-particle-field" aria-hidden="true">
+          {introParticles.map(index => (
+            <span key={`intro-particle-${index}`} style={{ '--particle': index } as React.CSSProperties} />
           ))}
         </span>
         <span className="intro-glyph-field" aria-hidden="true">
@@ -303,6 +340,16 @@ export default function ReferenceLanding() {
 
             <div className="hero-visual" aria-label="Portfolio portrait and signal study">
               <div className="name-signal" aria-hidden="true">
+                <div className="name-signal-orbits">
+                  {introRings.map(index => (
+                    <span key={`hero-ring-${index}`} style={{ '--ring': index } as React.CSSProperties} />
+                  ))}
+                </div>
+                <div className="name-signal-lines">
+                  {heroScanLines.map(index => (
+                    <span key={`hero-line-${index}`} style={{ '--line': index } as React.CSSProperties} />
+                  ))}
+                </div>
                 <div className="name-signal-core">
                   <span>JIAWEN</span>
                   <strong>SUN</strong>

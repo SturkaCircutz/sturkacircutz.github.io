@@ -121,6 +121,22 @@ button {
   transition: opacity 460ms ease, visibility 460ms ease;
 }
 
+.intro-spotlight {
+  position: absolute;
+  inset: -18%;
+  z-index: 0;
+  background:
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(241, 238, 230, 0.24), transparent 0 7rem, rgba(127, 218, 209, 0.12) 11rem, transparent 19rem),
+    radial-gradient(circle at calc(100% - var(--pointer-x)) calc(100% - var(--pointer-y)), rgba(255, 95, 98, 0.18), transparent 0 13rem);
+  opacity: 0.82;
+  transform: translate(
+    calc(var(--pointer-shift-x) * -1.2rem),
+    calc(var(--pointer-shift-y) * -1.2rem)
+  );
+  transition: transform 120ms ease-out;
+  pointer-events: none;
+}
+
 .intro-gate::before,
 .intro-gate::after {
   position: absolute;
@@ -138,6 +154,7 @@ button {
   transform: perspective(720px) rotateX(62deg) translateY(10rem);
   transform-origin: bottom;
   animation: introGridIdle 4.8s linear infinite;
+  transition: transform 120ms ease-out;
 }
 
 .intro-gate::after {
@@ -168,6 +185,63 @@ button {
 
 .intro-gate.is-running::after {
   animation: introBeamRun 520ms cubic-bezier(0.2, 0.72, 0, 1) 5;
+}
+
+.intro-ring-field {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  transform: translate(
+    calc(var(--pointer-shift-x) * 1.6rem),
+    calc(var(--pointer-shift-y) * 1.2rem)
+  );
+  transition: transform 140ms ease-out;
+}
+
+.intro-ring-field span {
+  position: absolute;
+  top: var(--pointer-y);
+  left: var(--pointer-x);
+  width: calc(10rem + var(--ring) * 5rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(241, 238, 230, 0.12);
+  border-radius: 999px;
+  opacity: calc(0.52 - var(--ring) * 0.065);
+  transform: translate(-50%, -50%) rotate(calc(var(--ring) * 17deg));
+  animation: introRingPulse 3.6s ease-in-out infinite alternate;
+  animation-delay: calc(var(--ring) * -520ms);
+}
+
+.intro-ring-field span::before,
+.intro-ring-field span::after {
+  position: absolute;
+  content: "";
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.intro-ring-field span::before {
+  top: 12%;
+  left: 50%;
+  width: 0.5rem;
+  aspect-ratio: 1;
+  background: var(--cyan);
+  box-shadow: 0 0 1.2rem rgba(127, 218, 209, 0.82);
+}
+
+.intro-ring-field span::after {
+  right: 18%;
+  bottom: 8%;
+  width: 0.36rem;
+  aspect-ratio: 1;
+  background: var(--coral);
+  box-shadow: 0 0 1rem rgba(255, 95, 98, 0.74);
+}
+
+.intro-gate.is-running .intro-ring-field span {
+  animation: introRingRun 640ms cubic-bezier(0.2, 0.72, 0, 1) 4;
+  animation-delay: calc(var(--ring) * 65ms);
 }
 
 .intro-corner {
@@ -225,6 +299,43 @@ button {
   animation: introRowsRun 620ms steps(6) 4;
 }
 
+.intro-particle-field {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.intro-particle-field span {
+  position: absolute;
+  top: var(--pointer-y);
+  left: var(--pointer-x);
+  width: calc(0.2rem + (var(--particle) % 4) * 0.06rem);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: rgba(241, 238, 230, 0.84);
+  box-shadow: 0 0 1rem rgba(127, 218, 209, 0.48);
+  opacity: 0;
+  transform:
+    translate(-50%, -50%)
+    rotate(calc(var(--particle) * 37deg))
+    translateX(calc(4rem + (var(--particle) % 7) * 1.3rem))
+    scale(0.2);
+}
+
+.intro-particle-field span:nth-child(3n) {
+  background: var(--cyan);
+}
+
+.intro-particle-field span:nth-child(3n + 1) {
+  background: var(--coral);
+}
+
+.intro-gate.is-running .intro-particle-field span {
+  animation: particleBurst 880ms cubic-bezier(0.18, 0.74, 0.1, 1) 3;
+  animation-delay: calc(var(--particle) * 18ms);
+}
+
 .intro-glyph-field,
 .hero-glyph-field {
   position: absolute;
@@ -254,6 +365,21 @@ button {
   animation-delay: calc(var(--glyph) * -330ms);
 }
 
+.intro-glyph-field span {
+  transform:
+    translate(-50%, -50%)
+    translate(
+      calc(var(--pointer-shift-x) * (0.35rem + var(--glyph) * 0.045rem)),
+      calc(var(--pointer-shift-y) * (0.35rem + var(--glyph) * 0.04rem))
+    );
+  transition: transform 120ms ease-out, border-color 160ms ease, color 160ms ease;
+}
+
+.intro-gate:hover .intro-glyph-field span {
+  border-color: rgba(127, 218, 209, 0.48);
+  color: rgba(241, 238, 230, 0.92);
+}
+
 .intro-gate.is-running .intro-glyph-field span {
   animation: glyphRun 680ms cubic-bezier(0.2, 0.72, 0, 1) 4;
   animation-delay: calc(var(--glyph) * 22ms);
@@ -274,6 +400,15 @@ button {
   text-align: center;
   text-transform: uppercase;
   filter: drop-shadow(0 0 2rem rgba(127, 218, 209, 0.18));
+  transform:
+    translate(
+      calc(var(--pointer-shift-x) * -0.85rem),
+      calc(var(--pointer-shift-y) * -0.65rem)
+    )
+    rotateX(calc(var(--pointer-shift-y) * -4deg))
+    rotateY(calc(var(--pointer-shift-x) * 5deg));
+  transform-style: preserve-3d;
+  transition: transform 140ms ease-out;
 }
 
 .intro-name-lockup span {
@@ -861,6 +996,7 @@ button {
   place-items: center;
   overflow: hidden;
   background:
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(241, 238, 230, 0.12), transparent 0 4rem, rgba(127, 218, 209, 0.15) 9rem, transparent 18rem),
     radial-gradient(circle at 50% 42%, rgba(127, 218, 209, 0.2), transparent 16rem),
     linear-gradient(145deg, rgba(241, 238, 230, 0.07), transparent 42%),
     #0d0f0d;
@@ -890,6 +1026,73 @@ button {
   border-radius: 999px;
   background: radial-gradient(circle, rgba(255, 95, 98, 0.16), transparent 56%);
   animation: signalHalo 8s ease-in-out infinite alternate;
+  transform: translate(
+    calc(var(--pointer-shift-x) * 0.8rem),
+    calc(var(--pointer-shift-y) * 0.8rem)
+  );
+}
+
+.name-signal-orbits {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  transform:
+    translate(
+      calc(var(--pointer-shift-x) * 0.9rem),
+      calc(var(--pointer-shift-y) * 0.75rem)
+    )
+    rotate(calc(var(--pointer-shift-x) * 3deg));
+  transition: transform 140ms ease-out;
+}
+
+.name-signal-orbits span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(12rem + var(--ring) * 4.4rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(241, 238, 230, 0.11);
+  border-radius: 999px;
+  opacity: calc(0.54 - var(--ring) * 0.065);
+  transform: translate(-50%, -50%) rotate(calc(var(--ring) * 23deg));
+  animation: signalOrbit 10s linear infinite;
+  animation-delay: calc(var(--ring) * -840ms);
+}
+
+.name-signal-orbits span::before {
+  position: absolute;
+  top: 9%;
+  left: 50%;
+  width: 0.42rem;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: var(--cyan);
+  box-shadow: 0 0 1rem rgba(127, 218, 209, 0.78);
+  content: "";
+}
+
+.name-signal-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.name-signal-lines span {
+  position: absolute;
+  top: calc(12% + var(--line) * 11%);
+  left: -20%;
+  width: 140%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(241, 238, 230, 0.42), rgba(127, 218, 209, 0.46), transparent);
+  opacity: 0.24;
+  transform:
+    translateX(calc(var(--pointer-shift-x) * 1.4rem))
+    rotate(calc(-10deg + var(--line) * 3deg));
+  animation: signalLineSweep 4.6s ease-in-out infinite;
+  animation-delay: calc(var(--line) * -380ms);
 }
 
 .name-signal-core {
@@ -904,6 +1107,15 @@ button {
   line-height: 0.78;
   text-align: center;
   text-transform: uppercase;
+  transform:
+    translate(
+      calc(var(--pointer-shift-x) * -0.75rem),
+      calc(var(--pointer-shift-y) * -0.55rem)
+    )
+    rotateX(calc(var(--pointer-shift-y) * -3deg))
+    rotateY(calc(var(--pointer-shift-x) * 4deg));
+  transform-style: preserve-3d;
+  transition: transform 140ms ease-out;
 }
 
 .name-signal-core span,
@@ -960,6 +1172,11 @@ button {
   font-size: 0.64rem;
   font-weight: 900;
   text-transform: uppercase;
+  animation: tagFlicker 3.4s steps(1) infinite;
+}
+
+.name-signal-tags span:nth-child(2n) {
+  animation-delay: -1.2s;
 }
 
 .hero-glyph-field {
@@ -1014,6 +1231,7 @@ button {
   opacity: 0.52;
   transform: rotate(-9deg);
   animation: beamPulse 5s ease-in-out infinite;
+  transform-origin: center;
 }
 
 .hero-bottom {
@@ -1604,6 +1822,32 @@ button {
   }
 }
 
+@keyframes introRingPulse {
+  from {
+    opacity: 0.22;
+    transform: translate(-50%, -50%) rotate(calc(var(--ring) * 17deg)) scale(0.88);
+  }
+  to {
+    opacity: 0.62;
+    transform: translate(-50%, -50%) rotate(calc(var(--ring) * 17deg + 28deg)) scale(1.08);
+  }
+}
+
+@keyframes introRingRun {
+  0% {
+    opacity: 0.16;
+    transform: translate(-50%, -50%) rotate(calc(var(--ring) * 17deg)) scale(0.28);
+  }
+  44% {
+    opacity: 0.88;
+    transform: translate(-50%, -50%) rotate(calc(var(--ring) * 17deg + 70deg)) scale(1.12);
+  }
+  100% {
+    opacity: 0.2;
+    transform: translate(-50%, -50%) rotate(calc(var(--ring) * 17deg + 140deg)) scale(1.85);
+  }
+}
+
 @keyframes introRowsIdle {
   0%,
   100% {
@@ -1628,6 +1872,28 @@ button {
   100% {
     opacity: 0.18;
     transform: translateX(0) skewX(0);
+  }
+}
+
+@keyframes particleBurst {
+  0% {
+    opacity: 0;
+    transform:
+      translate(-50%, -50%)
+      rotate(calc(var(--particle) * 37deg))
+      translateX(0)
+      scale(0.2);
+  }
+  24% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform:
+      translate(-50%, -50%)
+      rotate(calc(var(--particle) * 37deg))
+      translateX(calc(7rem + (var(--particle) % 9) * 1.65rem))
+      scale(1);
   }
 }
 
@@ -1722,6 +1988,50 @@ button {
   }
 }
 
+@keyframes signalOrbit {
+  from {
+    transform: translate(-50%, -50%) rotate(calc(var(--ring) * 23deg));
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(calc(var(--ring) * 23deg + 360deg));
+  }
+}
+
+@keyframes signalLineSweep {
+  0% {
+    opacity: 0;
+    transform:
+      translateX(calc(-12% + var(--pointer-shift-x) * 1.4rem))
+      rotate(calc(-10deg + var(--line) * 3deg));
+  }
+  40% {
+    opacity: 0.48;
+  }
+  100% {
+    opacity: 0;
+    transform:
+      translateX(calc(12% + var(--pointer-shift-x) * 1.4rem))
+      rotate(calc(-10deg + var(--line) * 3deg));
+  }
+}
+
+@keyframes tagFlicker {
+  0%,
+  86%,
+  100% {
+    opacity: 0.72;
+  }
+  88% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.36;
+  }
+  92% {
+    opacity: 0.88;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1747,6 +2057,10 @@ button {
 }
 
 @media (max-width: 980px) {
+  .intro-ring-field span {
+    width: calc(7rem + var(--ring) * 4rem);
+  }
+
   .intro-signal-rows {
     inset: 12vh -30vw auto;
     font-size: clamp(0.64rem, 1.8vw, 0.95rem);
@@ -1835,6 +2149,14 @@ button {
 
   .intro-glyph-field span:nth-child(n + 10) {
     display: none;
+  }
+
+  .intro-ring-field span {
+    width: calc(5.8rem + var(--ring) * 2.9rem);
+  }
+
+  .intro-particle-field span {
+    width: 0.18rem;
   }
 
   .ref-nav {
@@ -1941,6 +2263,15 @@ button {
 
   .name-signal-tags {
     inset: 0.75rem 0.75rem auto;
+  }
+
+  .name-signal-orbits span {
+    width: calc(8.5rem + var(--ring) * 3.1rem);
+  }
+
+  .name-signal-lines span {
+    left: -40%;
+    width: 180%;
   }
 
   .hero-bottom {
