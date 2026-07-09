@@ -76,6 +76,8 @@ const heroGlyphs = [
 const introParticles = Array.from({ length: 26 }, (_, index) => index);
 const introRings = Array.from({ length: 5 }, (_, index) => index);
 const heroScanLines = Array.from({ length: 7 }, (_, index) => index);
+const sectionBeams = Array.from({ length: 6 }, (_, index) => index);
+const signalNodes = Array.from({ length: 9 }, (_, index) => index);
 
 type IntroState = 'idle' | 'running' | 'complete';
 
@@ -381,6 +383,11 @@ export default function ReferenceLanding() {
       </section>
 
       <section id="work" className="work-index" aria-labelledby="work-title">
+        <div className="work-motion" aria-hidden="true">
+          {sectionBeams.map(index => (
+            <span key={`work-beam-${index}`} style={{ '--beam': index } as React.CSSProperties} />
+          ))}
+        </div>
         <div className="section-rule">
           <span>WORK</span>
           <span>SELECTED REPOSITORIES</span>
@@ -428,6 +435,11 @@ export default function ReferenceLanding() {
       </section>
 
       <section id="capabilities" className="services-section" aria-labelledby="services-title">
+        <div className="services-motion" aria-hidden="true">
+          {signalNodes.map(index => (
+            <span key={`service-node-${index}`} style={{ '--node': index } as React.CSSProperties} />
+          ))}
+        </div>
         <div className="section-rule dark">
           <span>CAPABILITIES</span>
           <span>CAPABILITY MAP</span>
@@ -457,6 +469,11 @@ export default function ReferenceLanding() {
       </section>
 
       <section id="about" className="about-section" aria-labelledby="about-title">
+        <div className="about-motion" aria-hidden="true">
+          {sectionBeams.slice(0, 4).map(index => (
+            <span key={`about-scan-${index}`} style={{ '--beam': index } as React.CSSProperties} />
+          ))}
+        </div>
         <div className="about-media">
           <Image src={imageSrc} alt={personalInfo.name} width={720} height={900} priority />
           <div className="portrait-overlay">
@@ -481,6 +498,11 @@ export default function ReferenceLanding() {
       </section>
 
       <section id="contact" className="contact-section" aria-labelledby="contact-title">
+        <div className="contact-motion" aria-hidden="true">
+          {sectionBeams.map(index => (
+            <span key={`contact-beam-${index}`} style={{ '--beam': index } as React.CSSProperties} />
+          ))}
+        </div>
         <div className="contact-top">
           <p className="eyebrow">research / product / build</p>
           <h2 id="contact-title">Build the next useful thing.</h2>

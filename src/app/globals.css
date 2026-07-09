@@ -1287,6 +1287,48 @@ button {
   animation: paperSweep 12s linear infinite;
 }
 
+.work-motion,
+.services-motion,
+.about-motion,
+.contact-motion {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.work-motion {
+  opacity: 0.62;
+}
+
+.work-motion span {
+  position: absolute;
+  top: calc(9% + var(--beam) * 13%);
+  left: -18%;
+  width: 136%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(13, 15, 13, 0.38), rgba(255, 95, 98, 0.52), transparent);
+  transform:
+    translateX(calc(var(--pointer-shift-x) * 1.2rem))
+    rotate(calc(-10deg + var(--beam) * 3deg));
+  animation: workBeamTravel 8s ease-in-out infinite;
+  animation-delay: calc(var(--beam) * -760ms);
+}
+
+.work-motion span::before {
+  position: absolute;
+  top: -0.35rem;
+  left: calc(12% + var(--beam) * 8%);
+  width: 0.72rem;
+  aspect-ratio: 1;
+  border: 1px solid rgba(13, 15, 13, 0.34);
+  background: rgba(255, 95, 98, 0.72);
+  content: "";
+  transform: rotate(45deg);
+  animation: workNodeBlink 2.8s steps(1) infinite;
+  animation-delay: calc(var(--beam) * -320ms);
+}
+
 .section-rule {
   border-top: 1px solid currentColor;
   padding-top: 0.72rem;
@@ -1297,6 +1339,8 @@ button {
 }
 
 .identity-word {
+  position: relative;
+  z-index: 1;
   margin: clamp(3.2rem, 7vw, 7rem) 0 clamp(2.5rem, 5vw, 5rem);
   font-family: var(--font-geist-sans), Arial, sans-serif;
   font-size: 12.5rem;
@@ -1304,6 +1348,20 @@ button {
   letter-spacing: 0;
   line-height: 0.82;
   text-transform: uppercase;
+}
+
+.identity-word::after {
+  position: absolute;
+  right: 0;
+  bottom: -0.12em;
+  left: 0;
+  z-index: -1;
+  height: 0.18em;
+  background: linear-gradient(90deg, transparent, rgba(255, 95, 98, 0.72), rgba(127, 218, 209, 0.52), transparent);
+  content: "";
+  transform: scaleX(0.3) skewX(-14deg);
+  transform-origin: left;
+  animation: titleUnderlineSweep 4.8s ease-in-out infinite;
 }
 
 .work-list {
@@ -1322,7 +1380,19 @@ button {
   font-size: clamp(1rem, 1.55vw, 1.65rem);
   font-weight: 900;
   text-transform: uppercase;
-  transition: background 180ms ease, color 180ms ease, padding 180ms ease;
+  position: relative;
+  overflow: hidden;
+  transition: background 180ms ease, color 180ms ease, padding 180ms ease, transform 180ms ease;
+}
+
+.work-row::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(127, 218, 209, 0.22), transparent);
+  content: "";
+  opacity: 0;
+  transform: translateX(-110%);
+  transition: opacity 160ms ease;
 }
 
 .work-row:hover {
@@ -1330,6 +1400,12 @@ button {
   color: var(--paper);
   padding-right: 1rem;
   padding-left: 1rem;
+  transform: translateX(0.35rem);
+}
+
+.work-row:hover::before {
+  opacity: 1;
+  animation: rowSweep 720ms ease;
 }
 
 .work-row:last-child {
@@ -1354,12 +1430,47 @@ button {
 }
 
 .feature-work article {
+  position: relative;
+  overflow: hidden;
   display: flex;
   min-height: 25rem;
   flex-direction: column;
   background: var(--paper);
   padding: clamp(1.2rem, 2vw, 2rem);
   transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.feature-work article::before,
+.feature-work article::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+.feature-work article::before {
+  inset: 0;
+  background:
+    linear-gradient(120deg, transparent 0 34%, rgba(127, 218, 209, 0.14) 34.5% 36%, transparent 36.5%),
+    repeating-linear-gradient(0deg, rgba(13, 15, 13, 0.055) 0 1px, transparent 1px 0.78rem);
+  opacity: 0.28;
+  transform: translateY(-18%);
+  animation: featureScan 7s linear infinite;
+}
+
+.feature-work article::after {
+  right: 1rem;
+  bottom: 1rem;
+  width: 3.2rem;
+  aspect-ratio: 1;
+  border: 1px solid currentColor;
+  opacity: 0.18;
+  transform: rotate(18deg);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.feature-work article:hover::after {
+  opacity: 0.44;
+  transform: rotate(58deg) scale(1.08);
 }
 
 .feature-work article:hover {
@@ -1450,8 +1561,45 @@ button {
   pointer-events: none;
 }
 
+.services-motion {
+  z-index: 0;
+}
+
+.services-motion span {
+  position: absolute;
+  top: calc(12% + (var(--node) % 3) * 26%);
+  left: calc(8% + var(--node) * 9%);
+  width: calc(0.7rem + (var(--node) % 3) * 0.22rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(241, 238, 230, 0.2);
+  background: rgba(127, 218, 209, 0.12);
+  box-shadow: 0 0 1.2rem rgba(127, 218, 209, 0.16);
+  opacity: 0.48;
+  transform:
+    translate(
+      calc(var(--pointer-shift-x) * (0.4rem + var(--node) * 0.08rem)),
+      calc(var(--pointer-shift-y) * (0.35rem + var(--node) * 0.06rem))
+    )
+    rotate(45deg);
+  animation: serviceNodeFloat 5.6s ease-in-out infinite alternate;
+  animation-delay: calc(var(--node) * -420ms);
+}
+
+.services-motion span::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(127, 218, 209, 0.48), transparent);
+  content: "";
+  opacity: 0.32;
+  transform: translateY(-50%) rotate(calc(var(--node) * 17deg));
+}
+
 .services-layout {
   position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
   gap: clamp(2rem, 5vw, 6rem);
@@ -1476,11 +1624,34 @@ button {
 }
 
 .service-row {
+  position: relative;
+  overflow: hidden;
   display: grid;
   grid-template-columns: 3rem minmax(0, 1fr);
   gap: 1.2rem;
   background: rgba(13, 15, 13, 0.92);
   padding: clamp(1.1rem, 2vw, 1.8rem);
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.service-row::before {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(127, 218, 209, 0.16), transparent 16rem),
+    linear-gradient(90deg, transparent, rgba(255, 95, 98, 0.08), transparent);
+  content: "";
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.service-row:hover {
+  background: rgba(18, 22, 18, 0.96);
+  transform: translateX(0.45rem);
+}
+
+.service-row:hover::before {
+  opacity: 1;
 }
 
 .service-row > span {
@@ -1503,6 +1674,7 @@ button {
 }
 
 .about-section {
+  overflow: hidden;
   display: grid;
   grid-template-columns: minmax(18rem, 0.55fr) minmax(0, 1fr);
   gap: clamp(2rem, 5vw, 6rem);
@@ -1511,11 +1683,30 @@ button {
   color: var(--ink);
 }
 
+.about-motion {
+  opacity: 0.7;
+}
+
+.about-motion span {
+  position: absolute;
+  top: calc(16% + var(--beam) * 17%);
+  right: -18%;
+  width: 70%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(13, 15, 13, 0.28), rgba(127, 218, 209, 0.38), transparent);
+  transform:
+    translateX(calc(var(--pointer-shift-x) * -1.5rem))
+    rotate(calc(10deg - var(--beam) * 4deg));
+  animation: aboutScanner 6.4s ease-in-out infinite;
+  animation-delay: calc(var(--beam) * -580ms);
+}
+
 .about-media {
   position: relative;
   min-height: 42rem;
   overflow: hidden;
   background: var(--ink);
+  transform: translateZ(0);
 }
 
 .about-media::after {
@@ -1529,6 +1720,19 @@ button {
   mix-blend-mode: screen;
   opacity: 0.42;
   pointer-events: none;
+  animation: portraitGridShift 7s linear infinite;
+}
+
+.about-media::before {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, transparent, rgba(127, 218, 209, 0.2), transparent);
+  content: "";
+  opacity: 0.28;
+  transform: translateY(-100%);
+  animation: portraitScan 5.8s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .about-media img {
@@ -1537,6 +1741,12 @@ button {
   object-fit: cover;
   filter: grayscale(1) contrast(1.18);
   mix-blend-mode: luminosity;
+  transition: filter 220ms ease, transform 220ms ease;
+}
+
+.about-media:hover img {
+  filter: grayscale(1) contrast(1.28) brightness(1.08);
+  transform: scale(1.035);
 }
 
 .portrait-overlay {
@@ -1556,6 +1766,8 @@ button {
 }
 
 .about-copy {
+  position: relative;
+  z-index: 1;
   display: flex;
   min-width: 0;
   flex-direction: column;
@@ -1591,6 +1803,8 @@ button {
 }
 
 .contact-section {
+  position: relative;
+  overflow: hidden;
   min-height: 78svh;
   background:
     linear-gradient(rgba(241, 238, 230, 0.035) 1px, transparent 1px),
@@ -1598,6 +1812,30 @@ button {
     var(--ink);
   background-size: 3.4rem 3.4rem;
   color: var(--paper);
+}
+
+.contact-motion {
+  opacity: 0.74;
+}
+
+.contact-motion span {
+  position: absolute;
+  top: calc(12% + var(--beam) * 12%);
+  left: -20%;
+  width: 140%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(127, 218, 209, 0.52), rgba(255, 95, 98, 0.44), transparent);
+  transform:
+    translateX(calc(var(--pointer-shift-x) * 2rem))
+    rotate(calc(-14deg + var(--beam) * 5deg));
+  animation: contactBeam 5.4s ease-in-out infinite;
+  animation-delay: calc(var(--beam) * -500ms);
+}
+
+.contact-top,
+.contact-grid {
+  position: relative;
+  z-index: 1;
 }
 
 .contact-top {
@@ -1619,6 +1857,8 @@ button {
 }
 
 .contact-link {
+  position: relative;
+  overflow: hidden;
   display: flex;
   min-height: 12rem;
   flex-direction: column;
@@ -1630,9 +1870,31 @@ button {
   transition: background 180ms ease, color 180ms ease;
 }
 
+.contact-link::before {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(241, 238, 230, 0.16), transparent 12rem),
+    linear-gradient(120deg, transparent, rgba(127, 218, 209, 0.2), transparent);
+  content: "";
+  opacity: 0;
+  transform: translateX(-20%);
+  transition: opacity 180ms ease, transform 260ms ease;
+}
+
 .contact-link:hover {
   background: var(--paper);
   color: var(--ink);
+}
+
+.contact-link:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.contact-link > * {
+  position: relative;
+  z-index: 1;
 }
 
 .contact-link span {
@@ -1748,6 +2010,153 @@ button {
   }
   to {
     background-position: 120vw 0, 4rem 0;
+  }
+}
+
+@keyframes workBeamTravel {
+  0% {
+    opacity: 0;
+    transform:
+      translateX(calc(-8% + var(--pointer-shift-x) * 1.2rem))
+      rotate(calc(-10deg + var(--beam) * 3deg));
+  }
+  42% {
+    opacity: 0.72;
+  }
+  100% {
+    opacity: 0;
+    transform:
+      translateX(calc(8% + var(--pointer-shift-x) * 1.2rem))
+      rotate(calc(-10deg + var(--beam) * 3deg));
+  }
+}
+
+@keyframes workNodeBlink {
+  0%,
+  78%,
+  100% {
+    opacity: 0.3;
+  }
+  80% {
+    opacity: 1;
+  }
+  84% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes titleUnderlineSweep {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: scaleX(0.18) translateX(-8%) skewX(-14deg);
+  }
+  48% {
+    opacity: 0.86;
+    transform: scaleX(0.88) translateX(12%) skewX(-14deg);
+  }
+}
+
+@keyframes rowSweep {
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(110%);
+  }
+}
+
+@keyframes featureScan {
+  from {
+    background-position: -16rem 0, 0 0;
+    transform: translateY(-18%);
+  }
+  to {
+    background-position: 22rem 0, 0 0.78rem;
+    transform: translateY(18%);
+  }
+}
+
+@keyframes serviceNodeFloat {
+  from {
+    opacity: 0.24;
+    transform:
+      translate(
+        calc(var(--pointer-shift-x) * (0.4rem + var(--node) * 0.08rem) - 0.6rem),
+        calc(var(--pointer-shift-y) * (0.35rem + var(--node) * 0.06rem) + 0.45rem)
+      )
+      rotate(45deg)
+      scale(0.86);
+  }
+  to {
+    opacity: 0.72;
+    transform:
+      translate(
+        calc(var(--pointer-shift-x) * (0.4rem + var(--node) * 0.08rem) + 0.8rem),
+        calc(var(--pointer-shift-y) * (0.35rem + var(--node) * 0.06rem) - 0.55rem)
+      )
+      rotate(88deg)
+      scale(1.08);
+  }
+}
+
+@keyframes aboutScanner {
+  0% {
+    opacity: 0;
+    transform:
+      translateX(calc(12% + var(--pointer-shift-x) * -1.5rem))
+      rotate(calc(10deg - var(--beam) * 4deg));
+  }
+  50% {
+    opacity: 0.64;
+  }
+  100% {
+    opacity: 0;
+    transform:
+      translateX(calc(-16% + var(--pointer-shift-x) * -1.5rem))
+      rotate(calc(10deg - var(--beam) * 4deg));
+  }
+}
+
+@keyframes portraitGridShift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 0.72rem 0.72rem, 0.72rem 0.72rem;
+  }
+}
+
+@keyframes portraitScan {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  45%,
+  55% {
+    opacity: 0.32;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+@keyframes contactBeam {
+  0% {
+    opacity: 0;
+    transform:
+      translateX(calc(-10% + var(--pointer-shift-x) * 2rem))
+      rotate(calc(-14deg + var(--beam) * 5deg));
+  }
+  44% {
+    opacity: 0.74;
+  }
+  100% {
+    opacity: 0;
+    transform:
+      translateX(calc(10% + var(--pointer-shift-x) * 2rem))
+      rotate(calc(-14deg + var(--beam) * 5deg));
   }
 }
 
@@ -2122,6 +2531,15 @@ button {
   .about-media {
     min-height: 34rem;
   }
+
+  .work-motion span,
+  .contact-motion span {
+    width: 170%;
+  }
+
+  .services-motion span:nth-child(n + 7) {
+    display: none;
+  }
 }
 
 @media (max-width: 700px) {
@@ -2289,6 +2707,17 @@ button {
   .about-section,
   .contact-section {
     padding: 4.5rem 1rem;
+  }
+
+  .work-motion span:nth-child(n + 4),
+  .about-motion span:nth-child(n + 3),
+  .contact-motion span:nth-child(n + 4),
+  .services-motion span:nth-child(n + 6) {
+    display: none;
+  }
+
+  .feature-work article::before {
+    opacity: 0.18;
   }
 
   .identity-word {
